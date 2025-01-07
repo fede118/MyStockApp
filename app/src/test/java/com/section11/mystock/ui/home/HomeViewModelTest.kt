@@ -1,16 +1,10 @@
 package com.section11.mystock.ui.home
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.compose.runtime.collectAsState
-import com.section11.mystock.domain.GetAllStocksUseCase
+import com.section11.mystock.domain.StockWatchlistUseCase
 import com.section11.mystock.models.Stock
 import com.section11.mystock.ui.home.HomeViewModel.HomeUiState
-import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -31,13 +25,13 @@ class HomeViewModelTest {
     private val testDispatcher = StandardTestDispatcher()
 
     private lateinit var viewModel: HomeViewModel
-    private lateinit var getAllStocksUseCase: GetAllStocksUseCase
+    private lateinit var stockWatchlistUseCase: StockWatchlistUseCase
 
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        getAllStocksUseCase = mock()
-        viewModel = HomeViewModel(getAllStocksUseCase, testDispatcher)
+        stockWatchlistUseCase = mock()
+        viewModel = HomeViewModel(stockWatchlistUseCase, testDispatcher)
     }
 
     @After
@@ -58,14 +52,14 @@ class HomeViewModelTest {
             Stock(name = "Stock 1", symbol = "STK1"),
             Stock(name = "Stock 2", symbol = "STK2")
         )
-        whenever(getAllStocksUseCase.getWatchlist()).thenReturn(flowOf(expectedStocks))
+        whenever(stockWatchlistUseCase.getWatchlist()).thenReturn(flowOf(expectedStocks))
 
         // When
         viewModel.getStocks()
         advanceUntilIdle()
 
         // Then
-        verify(getAllStocksUseCase).getWatchlist()
+        verify(stockWatchlistUseCase).getWatchlist()
         Assert.assertEquals(HomeUiState.Success(expectedStocks), viewModel.uiState.value)
     }
 }

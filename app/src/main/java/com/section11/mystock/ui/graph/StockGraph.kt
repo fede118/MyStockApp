@@ -12,9 +12,6 @@ import androidx.compose.ui.unit.dp
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-//todo move model
-data class GraphNode(val price: Double, val date: String, val volume: Int)
-
 @Composable
 fun StockGraph(stockData: List<GraphNode>) {
     val dateFormatter = DateTimeFormatter.ofPattern("MMM dd yyyy, hh:mm a z")
@@ -27,8 +24,8 @@ fun StockGraph(stockData: List<GraphNode>) {
 //    val maxVolume = parsedData.maxOf { it.volume }
 //    val minVolume = parsedData.minOf { it.volume }
 
-    val graphWidth = 300.dp
-    val graphHeight = 200.dp
+//    val graphWidth = 300.dp
+//    val graphHeight = 200.dp
     val padding = 16.dp
 
     Canvas(modifier = Modifier.fillMaxSize()) {
@@ -52,8 +49,11 @@ fun StockGraph(stockData: List<GraphNode>) {
         // Plot the data points
         val path = Path()
         parsedData.forEachIndexed { index, data ->
-            val x = padding.toPx() + (index.toFloat() / (parsedData.size - 1)) * (width - 2 * padding.toPx())
-            val y = (height - padding.toPx() - ((data.price - minPrice) / (maxPrice - minPrice) * (height - 2 * padding.toPx()))).toFloat()
+            val x = padding.toPx() +
+                    (index.toFloat() / (parsedData.size - 1)) * (width - 2 * padding.toPx())
+            val y = (height - padding.toPx() -
+                    ((data.price - minPrice) / (maxPrice - minPrice)
+                    * (height - 2 * padding.toPx()))).toFloat()
 
             if (index == 0) {
                 path.moveTo(x, y)
@@ -77,8 +77,12 @@ fun StockGraph(stockData: List<GraphNode>) {
     }
 }
 
+//todo move model
+data class GraphNode(val price: Double, val date: String, val volume: Int)
+
 @Preview
 @Composable
+@Suppress("MagicNumber")
 fun StockGraphPreview() {
 //    StockGraphTheme {
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
