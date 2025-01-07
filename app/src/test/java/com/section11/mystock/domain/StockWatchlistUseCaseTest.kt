@@ -11,15 +11,15 @@ import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever
 
-class GetAllStocksUseCaseTest {
+class StockWatchlistUseCaseTest {
 
-    private lateinit var getAllStocksUseCase: GetAllStocksUseCase
+    private lateinit var stockWatchlistUseCase: StockWatchlistUseCase
     private lateinit var stockRepository: StockRepository
 
     @Before
     fun setUp() {
         stockRepository = mock()
-        getAllStocksUseCase = GetAllStocksUseCase(stockRepository)
+        stockWatchlistUseCase = StockWatchlistUseCase(stockRepository)
     }
 
     @Test
@@ -32,7 +32,7 @@ class GetAllStocksUseCaseTest {
         whenever(stockRepository.getAllStocks()).thenReturn(flowOf(expectedStocks))
 
         // Act
-        val actualStocks = getAllStocksUseCase.getWatchlist().first()
+        val actualStocks = stockWatchlistUseCase.getWatchlist().first()
 
         // Assert
         Assert.assertEquals(expectedStocks, actualStocks)
@@ -45,7 +45,7 @@ class GetAllStocksUseCaseTest {
         whenever(stockRepository.getAllStocks()).thenReturn(flowOf(expectedStocks))
 
         // Act
-        val actualStocks = getAllStocksUseCase.getWatchlist().first()
+        val actualStocks = stockWatchlistUseCase.getWatchlist().first()
 
         // Assert
         Assert.assertEquals(expectedStocks, actualStocks)
