@@ -5,7 +5,7 @@ import com.section11.mystock.models.Stock
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetAllStocksUseCase @Inject constructor(private val stockRepository: StockRepository) {
+class StockWatchlistUseCase @Inject constructor(private val stockRepository: StockRepository) {
     fun getWatchlist(): Flow<List<Stock>> {
         return stockRepository.getAllStocks()
     }
