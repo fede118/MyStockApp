@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.detekt.gradle.plugin)
 }
 
 android {
@@ -36,6 +37,12 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+
+    detekt {
+        buildUponDefaultConfig = true // preconfigure defaults
+        allRules = true // activate all available (even unstable) rules.
+        config.setFrom(files("$projectDir/config/detekt/detekt.yml"))
     }
 }
 
