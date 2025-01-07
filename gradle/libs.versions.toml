@@ -12,6 +12,7 @@ lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.9.3"
 composeBom = "2024.04.01"
 detekt = "1.23.5"
+klint = "12.1.0"
 room = "2.6.1"
 ksp = "2.1.0-1.0.29"
 hilt = "2.53.1"
@@ -20,7 +21,7 @@ android-hilt-plugin-version = "2.50"
 mockito-core = "5.11.0"
 mockito-kotlin = "5.2.1"
 junitJupiter = "5.8.1"
-kotlinx-coroutines = "1.8.0"
+kotlinx-coroutines = "1.10.0"
 androidx-test-orchestrator = "1.4.2"
 
 [libraries]
@@ -60,5 +61,5 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 detekt-gradle-plugin = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-android-hilt = { id ="com.google.dagger.hilt.android", version.ref = "android-hilt-plugin-version" }
-
+android-hilt = { id = "com.google.dagger.hilt.android", version.ref = "android-hilt-plugin-version" }
+gradle-klint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "klint" }

@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.detekt.gradle.plugin)
+    alias(libs.plugins.gradle.klint)
     alias(libs.plugins.ksp)
     alias(libs.plugins.android.hilt)
 }
@@ -26,7 +27,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -44,6 +45,10 @@ android {
         buildUponDefaultConfig = true // preconfigure defaults
         allRules = true // activate all available (even unstable) rules.
         config.setFrom(files("$projectDir/config/detekt/detekt.yml"))
+    }
+
+    ktlint {
+        android = true
     }
 }
 
@@ -82,5 +87,4 @@ dependencies {
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
 }
