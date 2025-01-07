@@ -7,7 +7,7 @@ import com.section11.mystock.data.local.daos.StockDao
 import com.section11.mystock.data.local.entities.StockEntity
 import com.section11.mystock.data.repositories.StockRepository
 import com.section11.mystock.data.repositories.StockWatchListRoomRepository
-import com.section11.mystock.domain.GetAllStocksUseCase
+import com.section11.mystock.domain.StockWatchlistUseCase
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -58,8 +58,8 @@ abstract class MyStockModule {
 
         @Provides
         @Singleton
-        fun provideGetAllStocksUseCase(stockRepository: StockRepository): GetAllStocksUseCase {
-            return GetAllStocksUseCase(stockRepository)
+        fun provideGetAllStocksUseCase(stockRepository: StockRepository): StockWatchlistUseCase {
+            return StockWatchlistUseCase(stockRepository)
         }
 
         @Provides

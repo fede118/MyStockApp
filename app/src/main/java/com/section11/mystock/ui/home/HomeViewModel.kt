@@ -2,11 +2,10 @@ package com.section11.mystock.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.section11.mystock.domain.GetAllStocksUseCase
+import com.section11.mystock.domain.StockWatchlistUseCase
 import com.section11.mystock.models.Stock
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel@Inject constructor(
-    private val getAllStocksUseCase: GetAllStocksUseCase,
+    private val stockWatchlistUseCase: StockWatchlistUseCase,
     private val dispatcher: CoroutineDispatcher
 ): ViewModel() {
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
@@ -24,12 +23,13 @@ class HomeViewModel@Inject constructor(
 
     fun getStocks() {
         viewModelScope.launch(dispatcher) {
-            getAllStocksUseCase.getWatchlist().collect { stocks ->
+            stockWatchlistUseCase.getWatchlist().collect { stocks ->
                 _uiState.update { HomeUiState.Success(stocks) }
             }
         }
     }
 
+    @Suppress("UNUSED_PARAMETER") // will use soon
     fun onStockTap(stock: Stock): Unit {
         // TODO("Not yet implemented")
     }
