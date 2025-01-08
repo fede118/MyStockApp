@@ -1,7 +1,7 @@
 package com.section11.mystock.data.repositories
 
-import com.section11.mystock.data.local.daos.StockDao
-import com.section11.mystock.data.local.entities.StockEntity
+import com.section11.mystock.data.local.database.daos.StockDao
+import com.section11.mystock.data.local.database.entities.StockEntity
 import com.section11.mystock.models.Stock
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
