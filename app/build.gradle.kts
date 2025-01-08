@@ -71,6 +71,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.coroutines.core)
 
     ksp(libs.androidx.room.compiler)
@@ -83,7 +84,6 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.androidx.core.testing)
     testImplementation(libs.androidx.compose.junit4)
-//    testImplementation(libs.robolectric)
     testImplementation(libs.androidx.test.orchestrator)
 
     androidTestImplementation(libs.androidx.junit)
@@ -128,6 +128,7 @@ tasks.create("jacocoTestReport", JacocoReport::class.java) {
         "**/di/**/*.*",
         "**/models/**/*.*",
         "**/database/**/*.*",
+        "**/navigation/**/*.*",
         "**/composables/**", // exclude files in composable folders
         "**/*Composable*.*", // exclude files with "composable" in their name
         "**/*Composable*.*", // exclude files with "composable" in their name
@@ -210,6 +211,11 @@ tasks.register("checkCoverage") {
         println("Coverage is above the threshold of ${threshold}%")
         println("Coverage: ${coverage.format(2)}%")
     }
+}
+
+tasks.register("checkReadyForPr") {
+    dependsOn("jacocoTestReport")
+    dependsOn("detekt")
 }
 
 fun Double.format(digits: Int) = "%.${digits}f".format(this)

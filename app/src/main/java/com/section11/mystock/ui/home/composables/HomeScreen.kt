@@ -19,33 +19,31 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.section11.mystock.models.Stock
-import com.section11.mystock.ui.home.HomeViewModel
-import com.section11.mystock.ui.home.HomeViewModel.HomeUiState.Error
-import com.section11.mystock.ui.home.HomeViewModel.HomeUiState.Loading
-import com.section11.mystock.ui.home.HomeViewModel.HomeUiState.Success
+import com.section11.mystock.ui.home.HomeUiState
+import com.section11.mystock.ui.home.HomeUiState.Loading
 
 private val DEFAULT_PADDING = 16.dp
 
 @Composable
-fun HomeScreenStockList(modifier: Modifier = Modifier, viewModel: HomeViewModel = hiltViewModel()) {
-    val uiState by viewModel.uiState.collectAsState().also { viewModel.getStocks() }
+fun HomeScreenStockList(
+    modifier: Modifier = Modifier,
+    uiState: HomeUiState,
+    onStockTap: (Stock) -> Unit
+) {
     when (uiState) {
         is Loading -> FullScreenLoading()
-        is Success -> StockList(
+        is HomeUiState.Success -> StockList(
             modifier = modifier,
-            stocks = (uiState as Success).stocks,
-            onStockTap = { stock -> viewModel.onStockTap(stock) }
+            stocks = uiState.stocks,
+            onStockTap = { stock -> onStockTap(stock) }
         )
-        is Error -> Text("Error")
+        is HomeUiState.Error -> Text("Error")
     }
 }
 
@@ -117,5 +115,6 @@ private fun FullScreenLoading() {
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenStockListPreview() {
-    HomeScreenStockList()
+    val mockUiState = HomeUiState.Success(listOf(Stock("Apple", "AAPL")))
+    HomeScreenStockList(uiState = mockUiState, onStockTap = {})
 }

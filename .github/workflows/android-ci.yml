@@ -38,5 +38,7 @@ jobs:
       - name: Run Detekt
         run: ./gradlew detekt
 
-#      - name: Run Klint
-#        run: ./gradlew lintDebug
+#         ktlint is warning about stuff that shouldn't. For ex. functions starting with capital letters
+#         and this is convention in compose. And I couldn't make the config file work. I'll revisit
+#        - name: Run Klint
+#          run: ./gradlew lintDebug
