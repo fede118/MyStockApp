@@ -5,7 +5,6 @@ coreKtx = "1.15.0"
 androidx-core-testing = "2.2.0"
 junit = "4.13.2"
 androidx-junit = "1.2.1"
-#robolectric = "4.9"
 androidx-compose-ui-test-junit4 = "1.7.6"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.7"
@@ -16,6 +15,7 @@ room = "2.6.1"
 ksp = "2.1.0-1.0.29"
 hilt = "2.53.1"
 androidx-hilt-navigation-compose = "1.2.0"
+androidx-navigation = "2.8.5"
 android-hilt-plugin-version = "2.50"
 mockito-core = "5.11.0"
 mockito-kotlin = "5.2.1"
@@ -29,7 +29,6 @@ androidx-core-testing = { group = "androidx.arch.core", name = "core-testing", v
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-junit" }
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
-#robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
 androidx-compose-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "androidx-compose-ui-test-junit4" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
@@ -48,6 +47,7 @@ androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidx-hilt-navigation-compose" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito-core" }
 mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito-kotlin" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }

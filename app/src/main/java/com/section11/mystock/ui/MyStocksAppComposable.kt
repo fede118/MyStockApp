@@ -6,14 +6,21 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.section11.mystock.ui.home.composables.HomeScreenStockList
+import androidx.navigation.compose.rememberNavController
+import com.section11.mystock.ui.navigation.MyStockNavigationActions.Companion.HOME_ROUTE
+import com.section11.mystock.ui.navigation.MyStocksNavGraph
 import com.section11.mystock.ui.theme.MyStockTheme
 
 @Composable
 fun MyStocksApp() {
     MyStockTheme {
+        val navController = rememberNavController()
         Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
-            HomeScreenStockList(Modifier.padding(bottom = paddingValues.calculateBottomPadding()))
+            MyStocksNavGraph(
+                modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding()),
+                navController = navController,
+                startDestination = HOME_ROUTE /* currentRoute */
+            )
         }
     }
 }

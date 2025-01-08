@@ -13,6 +13,12 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+sealed interface HomeUiState {
+    data object Loading : HomeUiState
+    data class Success(val stocks: List<Stock>) : HomeUiState
+    data class Error(val message: String) : HomeUiState
+}
+
 @HiltViewModel
 class HomeViewModel@Inject constructor(
     private val stockWatchlistUseCase: StockWatchlistUseCase,
@@ -27,16 +33,5 @@ class HomeViewModel@Inject constructor(
                 _uiState.update { HomeUiState.Success(stocks) }
             }
         }
-    }
-
-    @Suppress("UNUSED_PARAMETER") // will use soon
-    fun onStockTap(stock: Stock): Unit {
-        // TODO("Not yet implemented")
-    }
-
-    sealed interface HomeUiState {
-        data object Loading : HomeUiState
-        data class Success(val stocks: List<Stock>) : HomeUiState
-        data class Error(val message: String) : HomeUiState
     }
 }
