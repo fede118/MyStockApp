@@ -61,4 +61,5 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 detekt-gradle-plugin = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 android-hilt = { id ="com.google.dagger.hilt.android", version.ref = "android-hilt-plugin-version" }
+jacoco = { id = "jacoco" }
 

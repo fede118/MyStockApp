@@ -2,9 +2,9 @@ package com.section11.mystock.di
 
 import android.content.Context
 import androidx.room.Room
-import com.section11.mystock.data.local.MyStockDatabase
-import com.section11.mystock.data.local.daos.StockDao
-import com.section11.mystock.data.local.entities.StockEntity
+import com.section11.mystock.data.local.database.MyStockDatabase
+import com.section11.mystock.data.local.database.daos.StockDao
+import com.section11.mystock.data.local.database.entities.StockEntity
 import com.section11.mystock.data.repositories.StockRepository
 import com.section11.mystock.data.repositories.StockWatchListRoomRepository
 import com.section11.mystock.domain.StockWatchlistUseCase
