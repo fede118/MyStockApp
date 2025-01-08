@@ -1,4 +1,4 @@
-package com.section11.mystock.ui.home
+package com.section11.mystock.ui.home.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.section11.mystock.models.Stock
+import com.section11.mystock.ui.home.HomeViewModel
 import com.section11.mystock.ui.home.HomeViewModel.HomeUiState.Error
 import com.section11.mystock.ui.home.HomeViewModel.HomeUiState.Loading
 import com.section11.mystock.ui.home.HomeViewModel.HomeUiState.Success
