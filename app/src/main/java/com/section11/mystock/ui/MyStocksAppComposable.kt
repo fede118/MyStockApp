@@ -6,7 +6,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.section11.mystock.ui.home.HomeScreenStockList
+import com.section11.mystock.ui.home.composables.HomeScreenStockList
 import com.section11.mystock.ui.theme.MyStockTheme
 
 @Composable

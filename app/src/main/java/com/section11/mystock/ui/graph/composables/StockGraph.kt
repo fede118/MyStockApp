@@ -1,3 +1,5 @@
+package com.section11.mystock.ui.graph.composables
+
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -9,6 +11,8 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.section11.mystock.models.GraphNode
+import com.section11.mystock.ui.theme.MyStockTheme
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -77,14 +81,11 @@ fun StockGraph(stockData: List<GraphNode>) {
     }
 }
 
-//todo move model
-data class GraphNode(val price: Double, val date: String, val volume: Int)
-
 @Preview
 @Composable
 @Suppress("MagicNumber")
 fun StockGraphPreview() {
-//    StockGraphTheme {
+    MyStockTheme {
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
             val stockData = listOf(
                 GraphNode(195.3, "Jan 06 2025, 09:30 AM UTC-05:00", 1086),
@@ -100,5 +101,5 @@ fun StockGraphPreview() {
             )
             StockGraph(stockData)
         }
-//    }
+    }
 }

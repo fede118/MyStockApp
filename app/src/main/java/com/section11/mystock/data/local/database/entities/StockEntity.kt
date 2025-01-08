@@ -1,4 +1,4 @@
-package com.section11.mystock.data.local.entities
+package com.section11.mystock.data.local.database.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
