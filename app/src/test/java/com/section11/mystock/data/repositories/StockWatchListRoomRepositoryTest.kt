@@ -2,11 +2,11 @@ package com.section11.mystock.data.repositories
 
 import com.section11.mystock.data.local.database.daos.StockDao
 import com.section11.mystock.data.local.database.entities.StockEntity
-import com.section11.mystock.models.Stock
+import com.section11.mystock.domain.models.Stock
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -18,12 +18,12 @@ class StockWatchListRoomRepositoryTest {
     @Mock
     private lateinit var stockDao: StockDao
 
-    private lateinit var repository: StockWatchListRoomRepository
+    private lateinit var repository: RoomStockWatchlistRepository
 
     @Before
     fun setup() {
         MockitoAnnotations.openMocks(this)
-        repository = StockWatchListRoomRepository(stockDao)
+        repository = RoomStockWatchlistRepository(stockDao)
     }
 
     @Test
@@ -43,7 +43,7 @@ class StockWatchListRoomRepositoryTest {
         val actualStocks = repository.getAllStocks().first()
 
         // Then
-        Assert.assertEquals(expectedStocks, actualStocks)
+        assertEquals(expectedStocks, actualStocks)
     }
 
     @Test
@@ -55,6 +55,6 @@ class StockWatchListRoomRepositoryTest {
         val actualStocks = repository.getAllStocks().first()
 
         // Then
-        Assert.assertEquals(emptyList<Stock>(), actualStocks)
+        assertEquals(emptyList<Stock>(), actualStocks)
     }
 }

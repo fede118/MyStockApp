@@ -1,4 +1,4 @@
-package com.section11.mystock.ui.graph.composables
+package com.section11.mystock.ui.singlestock.graph.composables
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.section11.mystock.models.GraphNode
+import com.section11.mystock.domain.models.GraphNode
 import com.section11.mystock.ui.theme.MyStockTheme
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -83,7 +83,7 @@ fun StockGraph(stockData: List<GraphNode>) {
 
 @Preview
 @Composable
-@Suppress("MagicNumber")
+@Suppress("MagicNumber") // this is mocked data
 fun StockGraphPreview() {
     MyStockTheme {
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {

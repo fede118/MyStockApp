@@ -1,10 +1,7 @@
 package com.section11.mystock.ui.navigation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -16,10 +13,9 @@ import androidx.navigation.navArgument
 import com.section11.mystock.ui.navigation.MyStockNavigationActions.Companion.HOME_ROUTE
 import com.section11.mystock.ui.navigation.MyStockNavigationActions.Companion.SINGLE_STOCK_ROUTE
 import com.section11.mystock.ui.navigation.MyStockNavigationActions.Companion.SINGLE_STOCK_SYMBOL
-import com.section11.mystock.ui.home.composables.HomeRoute
 import com.section11.mystock.ui.home.HomeViewModel
+import com.section11.mystock.ui.singlestock.SingleStockViewModel
 
-@Suppress("ForbiddenComment") // to do comment will be addressed soon
 @Composable
 fun MyStocksNavGraph(
     modifier: Modifier = Modifier,
@@ -34,9 +30,11 @@ fun MyStocksNavGraph(
     ) {
         composable(
             route = HOME_ROUTE
-        ) { navBackStackEntry ->
+        )  { navBackStackEntry ->
             val homeViewModel = hiltViewModel<HomeViewModel>(navBackStackEntry)
-            HomeRoute(homeViewModel, navigationActions.navigateToSingleStockView)
+            HomeRoute(homeViewModel) { symbol ->
+                navigationActions.navigateToSingleStockView(symbol)
+            }
         }
 
         composable(
@@ -46,19 +44,16 @@ fun MyStocksNavGraph(
             )
         ) { navBackStackEntry ->
             with(navBackStackEntry.arguments) {
-                // TODO: next create Single Stock screen/route
                 val symbol = this?.getString(SINGLE_STOCK_SYMBOL)
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (symbol != null) {
-                        Text(text ="SYMBOL TAPPED = $symbol")
-                    } else {
-                        Text(text ="Error")
-                    }
-                }
 
+                val singleStockViewModel = hiltViewModel<SingleStockViewModel>(navBackStackEntry)
+                symbol?.let {
+                    LaunchedEffect(key1 = symbol) {
+                        singleStockViewModel.getStockInformation(it)
+                    }
+
+                    SingleStockViewRoute(singleStockViewModel)
+                }
             }
         }
     }

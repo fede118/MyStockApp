@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.section11.mystock.models.Stock
+import com.section11.mystock.domain.models.Stock
 import com.section11.mystock.ui.home.HomeUiState
 import com.section11.mystock.ui.home.HomeUiState.Loading
 
