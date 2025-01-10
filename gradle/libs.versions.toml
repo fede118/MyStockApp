@@ -20,8 +20,11 @@ android-hilt-plugin-version = "2.50"
 mockito-core = "5.11.0"
 mockito-kotlin = "5.2.1"
 junitJupiter = "5.8.1"
-kotlinx-coroutines = "1.8.0"
-androidx-test-orchestrator = "1.4.2"
+kotlinx-coroutines = "1.10.0"
+androidx-test-orchestrator = "1.5.1"
+retrofit = "2.9.0"
+okhttp = "4.12.0"
+gson = "2.10.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -53,6 +56,10 @@ mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", versio
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 androidx-test-orchestrator = { group = "androidx.test", name = "orchestrator", version.ref = "androidx-test-orchestrator" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+retrofit-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

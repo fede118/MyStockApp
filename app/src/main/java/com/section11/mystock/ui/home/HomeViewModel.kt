@@ -2,8 +2,8 @@ package com.section11.mystock.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.section11.mystock.domain.StockWatchlistUseCase
-import com.section11.mystock.models.Stock
+import com.section11.mystock.domain.watchlist.StockWatchlistUseCase
+import com.section11.mystock.domain.models.Stock
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +20,7 @@ sealed interface HomeUiState {
 }
 
 @HiltViewModel
-class HomeViewModel@Inject constructor(
+class HomeViewModel @Inject constructor(
     private val stockWatchlistUseCase: StockWatchlistUseCase,
     private val dispatcher: CoroutineDispatcher
 ): ViewModel() {

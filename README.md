@@ -29,6 +29,7 @@ This application is built using modern Android development practices and leverag
 *   **Mockito:** For creating mock objects in unit tests, enabling isolated testing of components.
 *   **Kotlin DSL:** For defining dependencies and configurations in the Gradle build files, providing a more concise and type-safe way to manage the build process.
 *   **Version Catalog (TOML):** For centralizing dependency versions in a `libs.versions.toml` file, ensuring consistency and simplifying dependency updates.
+*   **SerpApi:** The API used to retrieve stock information. https://serpapi.com/
 
 ## CI/CD and Quality Assurance
 
@@ -38,8 +39,7 @@ This project incorporates Continuous Integration/Continuous Deployment (CI/CD) p
 *   **Test Suite:** A comprehensive suite of unit and UI tests is being developed to verify the correctness of the application's logic and UI.
 *   **Code Coverage:** Code coverage metrics are used to track the percentage of code covered by tests, ensuring that a high proportion of the codebase is tested.
 *   **Detekt:** Static code analysis tool used to identify potential code smells, bugs, and style violations, improving code quality and maintainability.
-*   ### todo: ###
-*   **Lint:** Static code analysis tool used to identify potential code smells, bugs, and style violations, improving code quality and maintainability. Currently lint is failing because of Compose and functions Starting with capital letters
+*   **Todo: Lint:** Static code analysis tool used to identify potential code smells, bugs, and style violations, improving code quality and maintainability. Currently lint is failing because of Compose and functions Starting with capital letters
 
 ## Architecture
 
@@ -51,7 +51,7 @@ The application follows a clean architecture, separating concerns into distinct 
 
 ## Future Enhancements
 
-*   **Single Stock Screen:** (currently being worked) Implement the UI for the single stock screen, displaying detailed information about a selected stock.
+*   **Single Stock Screen:** Implement the UI for the single stock screen, displaying detailed information about a selected stock.
 *   **Stock Search and Add to Watchlist:** Implement a search functionality (through and api) to allow users to find stocks and add them to their watchlist.
 *   **Error Handling:** Implement robust error handling for network requests, data parsing, and other potential issues, providing informative feedback to the user.
 *   **UI Compose Testing:** Address the current issues with running Compose tests to ensure the UI is thoroughly tested.

@@ -1,7 +1,8 @@
 package com.section11.mystock.domain
 
-import com.section11.mystock.data.repositories.StockRepository
-import com.section11.mystock.models.Stock
+import com.section11.mystock.domain.watchlist.StockWatchlistUseCase
+import com.section11.mystock.domain.models.Stock
+import com.section11.mystock.domain.repositories.StockWatchlistRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -14,12 +15,12 @@ import org.mockito.kotlin.whenever
 class StockWatchlistUseCaseTest {
 
     private lateinit var stockWatchlistUseCase: StockWatchlistUseCase
-    private lateinit var stockRepository: StockRepository
+    private lateinit var stockWatchlistRepository: StockWatchlistRepository
 
     @Before
     fun setUp() {
-        stockRepository = mock()
-        stockWatchlistUseCase = StockWatchlistUseCase(stockRepository)
+        stockWatchlistRepository = mock()
+        stockWatchlistUseCase = StockWatchlistUseCase(stockWatchlistRepository)
     }
 
     @Test
@@ -29,7 +30,7 @@ class StockWatchlistUseCaseTest {
             Stock(name = "Stock 1", symbol = "STK1"),
             Stock(name = "Stock 2", symbol = "STK2")
         )
-        whenever(stockRepository.getAllStocks()).thenReturn(flowOf(expectedStocks))
+        whenever(stockWatchlistRepository.getAllStocks()).thenReturn(flowOf(expectedStocks))
 
         // Act
         val actualStocks = stockWatchlistUseCase.getWatchlist().first()
@@ -42,7 +43,7 @@ class StockWatchlistUseCaseTest {
     fun `getWatchlist should return empty list if repository returns empty list`() = runTest {
         // Arrange
         val expectedStocks = emptyList<Stock>()
-        whenever(stockRepository.getAllStocks()).thenReturn(flowOf(expectedStocks))
+        whenever(stockWatchlistRepository.getAllStocks()).thenReturn(flowOf(expectedStocks))
 
         // Act
         val actualStocks = stockWatchlistUseCase.getWatchlist().first()
