@@ -23,12 +23,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.section11.mystock.domain.models.Stock
 import com.section11.mystock.ui.home.HomeUiState
 import com.section11.mystock.ui.home.HomeUiState.Loading
-
-private val DEFAULT_PADDING = 16.dp
+import com.section11.mystock.ui.theme.LocalSpacing
 
 @Composable
 fun HomeScreenStockList(
@@ -49,15 +47,16 @@ fun HomeScreenStockList(
 
 @Composable
 fun SectionTitle(title: String, modifier: Modifier = Modifier) {
+    val spacing = LocalSpacing.current
     Box(
         modifier = modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.primaryContainer)
-            .padding(DEFAULT_PADDING)
+            .padding(spacing.medium)
     ) {
         Text(
             style = MaterialTheme.typography.titleMedium,
-            modifier = modifier.padding(top = DEFAULT_PADDING),
+            modifier = modifier.padding(top = spacing.medium),
             text = title,
             color = MaterialTheme.colorScheme.onPrimaryContainer
         )
@@ -66,12 +65,13 @@ fun SectionTitle(title: String, modifier: Modifier = Modifier) {
 
 @Composable
 fun StockList(modifier: Modifier = Modifier, stocks: List<Stock>, onStockTap: (Stock) -> Unit) {
+    val spacing = LocalSpacing.current
     LazyColumn(modifier = modifier) {
         item { SectionTitle("Your Watchlist") }
         items(stocks.size) { index ->
             Column(modifier = Modifier.background(MaterialTheme.colorScheme.surfaceVariant)) {
                 StockRowItem(stock = stocks[index], onStockTap = onStockTap)
-                HorizontalDivider(color = Color.Gray, thickness = 1.dp)
+                HorizontalDivider(color = Color.Gray, thickness = spacing.minimum)
             }
         }
     }
@@ -79,24 +79,25 @@ fun StockList(modifier: Modifier = Modifier, stocks: List<Stock>, onStockTap: (S
 
 @Composable
 fun StockRowItem(modifier: Modifier = Modifier, stock: Stock, onStockTap: (Stock) -> Unit) {
+    val spacing = LocalSpacing.current
     Row(modifier = modifier.clickable { onStockTap(stock) }) {
         Icon(
             imageVector = Icons.Default.Star,
             modifier = modifier
-                .padding(8.dp)
+                .padding(spacing.small)
                 .align(Alignment.CenterVertically),
             contentDescription = null
         )
         Text(
             text = "${stock.symbol} - ${stock.name}",
             modifier = modifier
-                .padding(8.dp)
+                .padding(spacing.small)
                 .align(Alignment.CenterVertically)
         )
         Spacer(modifier = modifier.weight(1f))
         Text(
             text = "2.5%",
-            modifier = modifier.padding(DEFAULT_PADDING)
+            modifier = modifier.padding(spacing.medium)
         )
     }
 }

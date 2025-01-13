@@ -3,6 +3,7 @@ package com.section11.mystock.di
 import android.content.Context
 import androidx.room.Room
 import com.section11.mystock.BuildConfig
+import com.section11.mystock.common.resources.ResourceProvider
 import com.section11.mystock.data.local.database.MyStockDatabase
 import com.section11.mystock.data.local.database.daos.StockDao
 import com.section11.mystock.data.local.database.entities.StockEntity
@@ -12,6 +13,7 @@ import com.section11.mystock.data.service.StocksInformationService
 import com.section11.mystock.domain.repositories.StockWatchlistRepository
 import com.section11.mystock.domain.repositories.StocksInformationRepository
 import com.section11.mystock.domain.watchlist.StockWatchlistUseCase
+import com.section11.mystock.framework.resource.ResourceProviderImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -71,6 +73,11 @@ abstract class MyStockModule {
         @Singleton
         fun provideStockWatchlistUseCase(stockWatchlistRepository: StockWatchlistRepository): StockWatchlistUseCase {
             return StockWatchlistUseCase(stockWatchlistRepository)
+        }
+
+        @Provides
+        fun provideResourceProvider(@ApplicationContext context: Context): ResourceProvider {
+            return ResourceProviderImpl(context)
         }
 
         @Provides

@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">MyStock</string>
+
+    <!--  Single Stock Screen String  -->
+    <string name="single_stock_screen_symbol_text">Symbol: %s</string>
+    <string name="single_stock_screen_exchange_text">"Exchange: %s</string>
+    <string name="single_stock_screen_price_text">Price: %s %s</string>
+    <string name="single_stock_screen_price_movement_title">Price Movement</string>
+    <string name="single_stock_screen_arrow_up">▲</string>
+    <string name="single_stock_screen_arrow_down">▼</string>
+    <string name="single_stock_screen_price_movement_label">%s $%s</string>
+    <string name="single_stock_screen_plus">+</string>
+    <string name="single_stock_screen_minus">-</string>
+    <string name="single_stock_screen_price_movement_percentage">%s %s%%</string>
 </resources>
