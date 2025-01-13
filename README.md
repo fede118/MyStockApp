@@ -57,7 +57,7 @@ The application follows a clean architecture, separating concerns into distinct 
 
 ## Future Enhancements
 
-*   **Single Stock Screen:** Implement the UI for the single stock screen, displaying detailed information about a selected stock.
+*   **Single Stock Screen:** (currently being worked) Implement the UI for the single stock screen, displaying detailed information about a selected stock.
 *   **Stock Search and Add to Watchlist:** Implement a search functionality (through and api) to allow users to find stocks and add them to their watchlist.
 *   **Error Handling:** Implement robust error handling for network requests, data parsing, and other potential issues, providing informative feedback to the user.
 *   **UI Compose Testing:** Address the current issues with running Compose tests to ensure the UI is thoroughly tested.
