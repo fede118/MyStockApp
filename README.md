@@ -1,4 +1,4 @@
-# MyStocks - Android Stock Tracking Application
+# MyStocks - Android Stock Watchlist Application
 
 **MyStocks** is an Android application designed to allow users to track and view information about individual stocks. It provides a clean and intuitive interface for accessing stock data.
 

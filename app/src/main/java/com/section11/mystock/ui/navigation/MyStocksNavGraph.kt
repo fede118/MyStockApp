@@ -1,7 +1,6 @@
 package com.section11.mystock.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -45,15 +44,8 @@ fun MyStocksNavGraph(
         ) { navBackStackEntry ->
             with(navBackStackEntry.arguments) {
                 val symbol = this?.getString(SINGLE_STOCK_SYMBOL)
-
                 val singleStockViewModel = hiltViewModel<SingleStockViewModel>(navBackStackEntry)
-                symbol?.let {
-                    LaunchedEffect(key1 = symbol) {
-                        singleStockViewModel.getStockInformation(it)
-                    }
-
-                    SingleStockViewRoute(singleStockViewModel)
-                }
+                SingleStockViewRoute(symbol, singleStockViewModel)
             }
         }
     }
