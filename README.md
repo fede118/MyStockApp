@@ -9,12 +9,18 @@ This application is built using modern Android development practices and leverag
 *   View a list of stocks that the user is following (AKA. Watchlist)
 *   Navigate to a detailed view for a specific stock, showing more in-depth information.
 
+## How it Looks (WIP - making changes everyday now)
+
+Watchlist Screen | Single Stock Screen
+------|-------
+![image](https://github.com/user-attachments/assets/d9f94f67-8b3b-439b-b0cf-545e1f52aacb) | ![image](https://github.com/user-attachments/assets/52b61004-06a6-4d00-bdca-dad65f56f3ab)
+
 ## Key Features
 
+*   **Jetpack Compose:** The user interface is built using Jetpack Compose, allowing for a more reactive and efficient UI development process.
 *   **Navigation:** The app utilizes the Jetpack Navigation library to manage navigation between the home screen and the single stock detail screen.
 *   **Dependency Injection:** Hilt is used for dependency injection, making the code more modular, testable, and maintainable.
-*   **Declarative UI:** The user interface is built using Jetpack Compose, allowing for a more reactive and efficient UI development process.
-*   **ViewModel:** The app uses ViewModels to manage UI-related data and lifecycle, ensuring data consistency and separation of concerns.
+*   **MVVM:** The app uses ViewModels to manage UI-related data and lifecycle, ensuring data consistency and separation of concerns.
 
 ## Technologies Used
 
