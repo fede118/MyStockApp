@@ -2,16 +2,16 @@ package com.section11.mystock.data.repositories
 
 import com.section11.mystock.data.local.database.daos.StockDao
 import com.section11.mystock.data.local.database.entities.StockEntity
-import com.section11.mystock.models.Stock
+import com.section11.mystock.domain.repositories.StockWatchlistRepository
+import com.section11.mystock.domain.models.Stock
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-interface StockRepository {
-    fun getAllStocks(): Flow<List<Stock>>
-}
+class RoomStockWatchlistRepository @Inject constructor(
+    private val stockDao: StockDao
+): StockWatchlistRepository {
 
-class StockWatchListRoomRepository @Inject constructor(private val stockDao: StockDao) : StockRepository {
     override fun getAllStocks(): Flow<List<Stock>> {
         return stockDao.getStocksWatchlist().map { stockEntities ->
             stockEntities.map { it.toStock() }

@@ -23,6 +23,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildFeatures.buildConfig = true
+        buildConfigField("String", "SERP_API_KEY", "\"${project.findProperty("serpApiKey") ?: ""}\"")
+        buildConfigField("String", "SERP_API_BASE_URL", "\"${project.findProperty("serpApiBaseUrl") ?: ""}\"")
+        buildConfigField("String", "SERP_API_DEFAULT_MARKET", "\"${project.findProperty("serpApiDefaultMarket") ?: ""}\"")
     }
 
     buildTypes {
@@ -73,6 +78,10 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.okhttp)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.gson)
 
     ksp(libs.androidx.room.compiler)
     ksp(libs.hilt.compiler)
@@ -127,6 +136,7 @@ tasks.create("jacocoTestReport", JacocoReport::class.java) {
         "android/**/*.*",
         "**/di/**/*.*",
         "**/models/**/*.*",
+        "**/dto/**/*.*",
         "**/database/**/*.*",
         "**/navigation/**/*.*",
         "**/composables/**", // exclude files in composable folders
@@ -216,6 +226,7 @@ tasks.register("checkCoverage") {
 tasks.register("checkReadyForPr") {
     dependsOn("jacocoTestReport")
     dependsOn("detekt")
+    dependsOn("checkCoverage")
 }
 
 fun Double.format(digits: Int) = "%.${digits}f".format(this)

@@ -1,7 +1,7 @@
 package com.section11.mystock.ui.home
 
-import com.section11.mystock.domain.StockWatchlistUseCase
-import com.section11.mystock.models.Stock
+import com.section11.mystock.domain.watchlist.StockWatchlistUseCase
+import com.section11.mystock.domain.models.Stock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
