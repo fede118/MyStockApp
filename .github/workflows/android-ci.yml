@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ "development", "main" ]
 jobs:
-  build:
+  android-ci:
     runs-on: ubuntu-latest
 
     steps:

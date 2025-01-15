@@ -21,8 +21,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import com.section11.mystock.framework.utils.DarkAndLightPreviews
 import com.section11.mystock.ui.common.composables.SmallBodyText
+import com.section11.mystock.ui.model.GraphUiModel
 import com.section11.mystock.ui.model.StockInformationUiModel
 import com.section11.mystock.ui.singlestock.SingleStockViewModel
+import com.section11.mystock.ui.singlestock.graph.composables.LineGraph
 import com.section11.mystock.ui.theme.Green
 import com.section11.mystock.ui.theme.LocalSpacing
 import com.section11.mystock.ui.theme.MyStockTheme
@@ -40,7 +42,7 @@ fun SingleStockScreen(uiState: SingleStockViewModel.SingleStockUiState.Success) 
             Card(
                 shape = RoundedCornerShape(spacing.medium),
                 modifier = Modifier.fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(defaultElevation = spacing.minimum)
+                elevation = CardDefaults.cardElevation(defaultElevation = spacing.smallest)
             ) {
                 Column(
                     modifier = Modifier.padding(spacing.medium),
@@ -58,6 +60,8 @@ fun SingleStockScreen(uiState: SingleStockViewModel.SingleStockUiState.Success) 
                         priceMovementColor = priceMovementColor,
                         priceMovementPercentage = priceMovementPercentage
                     )
+
+                    LineGraph(graphModel)
                 }
             }
         }
@@ -118,7 +122,8 @@ fun PriceMovementSection(
     }
 }
 
-@DarkAndLightPreviews()
+@Suppress("MagicNumber") // Suppress warning for mock information on the preview
+@DarkAndLightPreviews
 @Composable
 fun StockScreenDarkThemePreview() {
     val stockInformationUiModel = StockInformationUiModel(
@@ -129,7 +134,18 @@ fun StockScreenDarkThemePreview() {
         priceMovementTitle = "Price Movement",
         priceMovementPercentage = "+5.0%",
         priceMovementColor = Green,
-        priceMovementValueLabel = "+10.0"
+        priceMovementValueLabel = "+10.0",
+        graphModel = GraphUiModel(
+            graphPoints = listOf(
+                156.01,
+                159.24,
+                123.01,
+                178.78,
+                250.01,
+                70.33
+            ),
+            graphHorizontalLabels = listOf("08:31", "08:36", "08:40", "08:45")
+        )
     )
 
     val uiState = SingleStockViewModel.SingleStockUiState.Success(stockInformationUiModel)

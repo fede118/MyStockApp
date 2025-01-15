@@ -5,7 +5,8 @@ import com.google.gson.annotations.SerializedName
 
 @Keep
 data class StockInformationResponse(
-    val summary: SummaryResponse
+    val summary: SummaryResponse,
+    val graph: List<GraphNodeResponse>
 )
 
 @Keep
@@ -23,4 +24,10 @@ data class PriceMovementResponse(
     val percentage: Double,
     val value: Double,
     val movement: String
+)
+
+@Keep
+data class GraphNodeResponse(
+    val price: Double,
+    val date: String
 )
