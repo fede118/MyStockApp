@@ -1,7 +1,10 @@
 package com.section11.mystock.domain.models
 
+import java.util.Date
+
 data class StockInformation(
-    val summary: Summary
+    val summary: Summary,
+    val graph: GraphInformation
 )
 
 data class Summary(
@@ -18,3 +21,21 @@ data class PriceMovement(
     val value: Double,
     val movement: String
 )
+
+data class GraphInformation(
+    val graphNodes: List<GraphNode>,
+    val horizontalAxisLabels: List<String>
+)
+
+data class GraphNode(
+    val price: Double,
+    val dateLabel: String
+)
+
+class GraphNodeDate : Date() {
+    companion object {
+        const val SERVICE_RESPONSE_DATE_FORMAT = "MMM dd yyyy, hh:mm a 'UTC'XXX"
+        const val GRAPH_NODE_DATE_FORMAT = "HH:mm"
+        const val GRAPH_DEFAULT_HORIZONTAL_LABELS = 4
+    }
+}

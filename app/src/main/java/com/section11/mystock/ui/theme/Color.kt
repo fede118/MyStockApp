@@ -11,4 +11,5 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val Green = Color(0xFF4CAF50)
+val Green40 = Color.Green.copy(alpha = 0.4f)
 val Red = Color(0xFFF44336)

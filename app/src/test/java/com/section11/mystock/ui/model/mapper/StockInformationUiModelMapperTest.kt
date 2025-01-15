@@ -2,6 +2,8 @@ package com.section11.mystock.ui.model.mapper
 
 import com.section11.mystock.R
 import com.section11.mystock.common.resources.ResourceProvider
+import com.section11.mystock.domain.models.GraphInformation
+import com.section11.mystock.domain.models.GraphNode
 import com.section11.mystock.domain.models.PriceMovement
 import com.section11.mystock.domain.models.StockInformation
 import com.section11.mystock.domain.models.Summary
@@ -28,8 +30,12 @@ private const val PRICE_MOVEMENT_VALUE_DOWN = 5.0
 private const val PRICE_MOVEMENT_PERCENTAGE_UP = 0.5
 private const val PRICE_MOVEMENT_PERCENTAGE_DOWN = 0.25
 private const val PRICE_MOVEMENT_TITLE = "Price Movement"
+private const val DEFAULT_GRAPH_SIZE = 30
 
 class StockInformationUiModelMapperTest {
+
+    private val mockListOfPrices = List(DEFAULT_GRAPH_SIZE) { it.toDouble() }
+    private val mockListOfLabels = listOf("Label 1", "Label 2", "Label 3")
 
     private lateinit var resourceProvider: ResourceProvider
     private lateinit var mapper: StockInformationUiModelMapper
@@ -86,7 +92,7 @@ class StockInformationUiModelMapperTest {
 
     @Test
     fun `mapToUiModel should map StockInformation to StockInformationUiModel correctly`() {
-        // Arrange
+        // Given
         val priceMovement = PriceMovement(
             percentage = PRICE_MOVEMENT_PERCENTAGE_UP,
             value = PRICE_MOVEMENT_VALUE_UP,
@@ -100,22 +106,35 @@ class StockInformationUiModelMapperTest {
             currency = STOCK_CURRENCY,
             priceMovement = priceMovement
         )
+
+        val graphInfo = GraphInformation(
+            graphNodes = List(DEFAULT_GRAPH_SIZE) { index ->
+                GraphNode(mockListOfPrices[index], "Date $index")
+            },
+            horizontalAxisLabels = mockListOfLabels,
+        )
         val stockInformation = StockInformation(
-            summary = summary
+            summary = summary,
+            graph = graphInfo
         )
 
-        // Act
+        // When
         val uiModel = mapper.mapToUiModel(stockInformation)
 
-        // Assert
-        assertEquals(STOCK_TITLE, uiModel.title)
-        assertEquals(STOCK_SYMBOL, uiModel.stockSymbolLabel)
-        assertEquals(STOCK_EXCHANGE, uiModel.exchangeLabel)
-        assertEquals("Price: $STOCK_PRICE $STOCK_CURRENCY", uiModel.priceLabel)
-        assertEquals(PRICE_MOVEMENT_TITLE, uiModel.priceMovementTitle)
-        assertEquals("↑ $PRICE_MOVEMENT_VALUE_UP", uiModel.priceMovementValueLabel)
-        assertEquals("+ $PRICE_MOVEMENT_PERCENTAGE_UP%", uiModel.priceMovementPercentage)
-        assertEquals(Green, uiModel.priceMovementColor)
+        // Then
+        with(uiModel) {
+            assertEquals(STOCK_TITLE, title)
+            assertEquals(STOCK_SYMBOL, stockSymbolLabel)
+            assertEquals(STOCK_EXCHANGE, exchangeLabel)
+            assertEquals("Price: $STOCK_PRICE $STOCK_CURRENCY", priceLabel)
+            assertEquals(PRICE_MOVEMENT_TITLE, priceMovementTitle)
+            assertEquals("↑ $PRICE_MOVEMENT_VALUE_UP", priceMovementValueLabel)
+            assertEquals("+ $PRICE_MOVEMENT_PERCENTAGE_UP%", priceMovementPercentage)
+            assertEquals(Green, priceMovementColor)
+            assertEquals(mockListOfPrices.size, graphModel.graphPoints.size)
+            assertEquals(mockListOfPrices, graphModel.graphPoints)
+            assertEquals(mockListOfLabels, graphModel.graphHorizontalLabels)
+        }
     }
 
     @Test
@@ -135,7 +154,8 @@ class StockInformationUiModelMapperTest {
             priceMovement = priceMovement
         )
         val stockInformation = StockInformation(
-            summary = summary
+            summary = summary,
+            graph = mock() // graph mapping is already tested in first test
         )
 
         // Act
@@ -164,7 +184,8 @@ class StockInformationUiModelMapperTest {
             priceMovement = priceMovement
         )
         val stockInformation = StockInformation(
-            summary = summary
+            summary = summary,
+            mock() // graph mapping is already tested in first test
         )
 
         // Act
