@@ -24,6 +24,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 val LocalSpacing = staticCompositionLocalOf { Spacing() }
+val LocalDimens = staticCompositionLocalOf { Dimens() }
 
 @Composable
 fun MyStockTheme(
@@ -43,9 +44,11 @@ fun MyStockTheme(
     }
 
     val spacing = Spacing()
+    val dimens = Dimens()
 
     CompositionLocalProvider(
-        LocalSpacing provides spacing
+        LocalSpacing provides spacing,
+        LocalDimens provides dimens
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
