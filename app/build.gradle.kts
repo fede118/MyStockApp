@@ -94,6 +94,8 @@ dependencies {
     testImplementation(libs.androidx.core.testing)
     testImplementation(libs.androidx.compose.junit4)
     testImplementation(libs.androidx.test.orchestrator)
+    testImplementation("io.mockk:mockk-android:1.13.16")
+    testImplementation("io.mockk:mockk-agent:1.13.16")
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

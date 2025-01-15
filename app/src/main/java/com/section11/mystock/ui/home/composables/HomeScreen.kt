@@ -71,7 +71,7 @@ fun StockList(modifier: Modifier = Modifier, stocks: List<Stock>, onStockTap: (S
         items(stocks.size) { index ->
             Column(modifier = Modifier.background(MaterialTheme.colorScheme.surfaceVariant)) {
                 StockRowItem(stock = stocks[index], onStockTap = onStockTap)
-                HorizontalDivider(color = Color.Gray, thickness = spacing.minimum)
+                HorizontalDivider(color = Color.Gray, thickness = spacing.smallest)
             }
         }
     }

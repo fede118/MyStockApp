@@ -3,14 +3,17 @@ package com.section11.mystock.ui.model.mapper
 import androidx.compose.ui.graphics.Color
 import com.section11.mystock.R
 import com.section11.mystock.common.resources.ResourceProvider
+import com.section11.mystock.domain.models.GraphInformation
 import com.section11.mystock.domain.models.StockInformation
+import com.section11.mystock.ui.common.extentions.toPercentageFormat
+import com.section11.mystock.ui.model.GraphUiModel
 import com.section11.mystock.ui.model.StockInformationUiModel
 import com.section11.mystock.ui.theme.Green
 import com.section11.mystock.ui.theme.Red
 import javax.inject.Inject
 
 private const val MOVEMENT_UP = "Up"
-private const val DEFAULT_DIGITS = 2
+private const val DEFAULT_HORIZONTAL_LINES = 3
 
 class StockInformationUiModelMapper @Inject constructor(
     private val resourceProvider: ResourceProvider
@@ -32,7 +35,8 @@ class StockInformationUiModelMapper @Inject constructor(
                     priceMovement.movement,
                     priceMovement.percentage
                 ),
-                priceMovementColor = getPriceMovementColor(priceMovement.movement)
+                priceMovementColor = getPriceMovementColor(priceMovement.movement),
+                graphModel = getGraphModel(stockInformation.graph)
             )
         }
     }
@@ -66,7 +70,7 @@ class StockInformationUiModelMapper @Inject constructor(
         return resourceProvider.getString(
             R.string.single_stock_screen_price_movement_label,
             arrow,
-            priceMovementValue.format(DEFAULT_DIGITS)
+            priceMovementValue.toPercentageFormat()
         )
     }
 
@@ -82,11 +86,11 @@ class StockInformationUiModelMapper @Inject constructor(
         return resourceProvider.getString(
             R.string.single_stock_screen_price_movement_percentage,
             sign,
-            priceMovementPercentage.format(DEFAULT_DIGITS)
+            priceMovementPercentage.toPercentageFormat()
         )
     }
 
-    private fun Double.format(digits: Int) = "%.${digits}f".format(this)
+
 
     private fun isPriceUp(priceMovement: String) = priceMovement == MOVEMENT_UP
 
@@ -97,6 +101,13 @@ class StockInformationUiModelMapper @Inject constructor(
             Red
         }
     }
+
+    private fun getGraphModel(graphInformation: GraphInformation): GraphUiModel {
+        return GraphUiModel(
+            graphPoints = graphInformation.graphNodes.map { it.price },
+            graphHorizontalLabels = graphInformation.horizontalAxisLabels,
+            graphBackgroundVerticalLinesAmount = graphInformation.horizontalAxisLabels.size,
+            graphBackgroundHorizontalLinesAmount = DEFAULT_HORIZONTAL_LINES
+        )
+    }
 }
-
-
