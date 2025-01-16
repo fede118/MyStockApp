@@ -1,0 +1,17 @@
+name: Validate Branch Name
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-branch-name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branch name
+        run: |
+          if [[ "${{ github.head_ref }}" != release/* ]]; then
+            echo "Error: Pull requests to 'main' can only come from branches starting with 'release/'"
+            exit 1
+          fi
