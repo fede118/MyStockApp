@@ -1,16 +1,11 @@
 package com.section11.mystock.ui.singlestock.composables
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -18,53 +13,57 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import com.section11.mystock.framework.utils.DarkAndLightPreviews
 import com.section11.mystock.ui.common.composables.SmallBodyText
-import com.section11.mystock.ui.model.GraphUiModel
+import com.section11.mystock.ui.common.composables.StockCard
+import com.section11.mystock.ui.common.previewsrepositories.FakeRepositoryForPreviews
 import com.section11.mystock.ui.model.StockInformationUiModel
-import com.section11.mystock.ui.singlestock.SingleStockViewModel
 import com.section11.mystock.ui.singlestock.graph.composables.LineGraph
-import com.section11.mystock.ui.theme.Green
 import com.section11.mystock.ui.theme.LocalSpacing
 import com.section11.mystock.ui.theme.MyStockTheme
 
 @Composable
-fun SingleStockScreen(uiState: SingleStockViewModel.SingleStockUiState.Success) {
-    with(uiState.stockInformationUiModel) {
-        val spacing = LocalSpacing.current
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(spacing.medium)
-                .statusBarsPadding()
-        ) {
-            Card(
-                shape = RoundedCornerShape(spacing.medium),
-                modifier = Modifier.fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(defaultElevation = spacing.smallest)
-            ) {
-                Column(
-                    modifier = Modifier.padding(spacing.medium),
-                    verticalArrangement = Arrangement.spacedBy(spacing.small)
-                ) {
-                    HeaderSection(title, stockSymbolLabel, exchangeLabel)
-                    Text(
-                        text = priceLabel,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    PriceMovementSection(
-                        priceMovementTitle = priceMovementTitle,
-                        priceMovementValueLabel = priceMovementValueLabel,
-                        priceMovementColor = priceMovementColor,
-                        priceMovementPercentage = priceMovementPercentage
-                    )
+fun SingleStockScreen(
+    stockInformationUiModel: StockInformationUiModel,
+    graphAnimationEnabled: Boolean = true
+) {
+    val spacing = LocalSpacing.current
 
-                    LineGraph(graphModel)
-                }
-            }
-        }
+    StockCard(
+        modifier = Modifier
+            .statusBarsPadding()
+            .padding(spacing.medium)
+    ) {
+        SingleStockCardContent(
+            stockInformationUiModel = stockInformationUiModel,
+            graphAnimationEnabled = graphAnimationEnabled
+        )
+    }
+}
+
+@Composable
+fun SingleStockCardContent(
+    modifier: Modifier = Modifier,
+    stockInformationUiModel: StockInformationUiModel,
+    graphAnimationEnabled: Boolean = true
+) {
+    with(stockInformationUiModel) {
+        HeaderSection(title, stockSymbolLabel, exchangeLabel)
+        Text(
+            text = priceLabel,
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold
+        )
+        PriceMovementSection(
+            priceMovementTitle = priceMovementTitle,
+            priceMovementValueLabel = priceMovementValueLabel,
+            priceMovementColor = priceMovementColor,
+            priceMovementPercentage = priceMovementPercentage
+        )
+
+        LineGraph(modifier, graphModel, graphAnimationEnabled)
     }
 }
 
@@ -126,32 +125,11 @@ fun PriceMovementSection(
 @DarkAndLightPreviews
 @Composable
 fun StockScreenDarkThemePreview() {
-    val stockInformationUiModel = StockInformationUiModel(
-        title = "Apple Inc.",
-        stockSymbolLabel = "Symbol: AAPL",
-        exchangeLabel = "Exchange: NASDAQ",
-        priceLabel = "Price: 150.0",
-        priceMovementTitle = "Price Movement",
-        priceMovementPercentage = "+5.0%",
-        priceMovementColor = Green,
-        priceMovementValueLabel = "+10.0",
-        graphModel = GraphUiModel(
-            graphPoints = listOf(
-                156.01,
-                159.24,
-                123.01,
-                178.78,
-                250.01,
-                70.33
-            ),
-            graphHorizontalLabels = listOf("08:31", "08:36", "08:40", "08:45")
-        )
-    )
+    val fakeRepo = FakeRepositoryForPreviews(LocalContext.current)
 
-    val uiState = SingleStockViewModel.SingleStockUiState.Success(stockInformationUiModel)
     MyStockTheme {
         Surface {
-            SingleStockScreen(uiState)
+            SingleStockScreen(fakeRepo.getSingleStockInformationUiModel(), false)
         }
     }
 }

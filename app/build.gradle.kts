@@ -94,8 +94,8 @@ dependencies {
     testImplementation(libs.androidx.core.testing)
     testImplementation(libs.androidx.compose.junit4)
     testImplementation(libs.androidx.test.orchestrator)
-    testImplementation("io.mockk:mockk-android:1.13.16")
-    testImplementation("io.mockk:mockk-agent:1.13.16")
+    testImplementation(libs.mockk.android)
+    testImplementation(libs.mockk.agent)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -141,6 +141,7 @@ tasks.create("jacocoTestReport", JacocoReport::class.java) {
         "**/dto/**/*.*",
         "**/database/**/*.*",
         "**/navigation/**/*.*",
+        "**/previewsrepositories/**/*.*",
         "**/composables/**", // exclude files in composable folders
         "**/*Composable*.*", // exclude files with "composable" in their name
         "**/*Composable*.*", // exclude files with "composable" in their name

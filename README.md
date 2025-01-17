@@ -11,13 +11,7 @@ This application is built using modern Android development practices and leverag
 
 ## How it Looks (WIP - making changes everyday now)
 
-Watchlist Screen | Single Stock Screen
-------|-------
-![image](https://github.com/user-attachments/assets/d9f94f67-8b3b-439b-b0cf-545e1f52aacb) | ![image](https://github.com/user-attachments/assets/52b61004-06a6-4d00-bdca-dad65f56f3ab)
-
-### Last Update (still in development)
-
-https://github.com/user-attachments/assets/3d330df0-d389-4bf8-9076-354e697e6c13
+https://github.com/user-attachments/assets/2cd2c3cb-84db-4e3d-a1f9-d15368438bc2
 
 ## Key Features
 
@@ -63,6 +57,7 @@ The application follows a clean architecture, separating concerns into distinct 
 
 *   **Match Watchlist screen to single stock screen:** I want to have a more consistent UI maybe have the same card design but smaller with less info, and see the second screen on tap
 *   **Stock Search and Add to Watchlist:** Implement a search functionality (through and api) to allow users to find stocks and add them to their watchlist.
+*   **Watchlist screen should get % from service** Right now its mocked data I would like it to be from a service, but I don't want to make N calls to get percentages. I need to check if it can be fetched on bulk.
 *   **Error Handling:** Implement robust error handling for network requests, data parsing, and other potential issues, providing informative feedback to the user.
 *   **UI Compose Testing:** Address the current issues with running Compose tests to ensure the UI is thoroughly tested.
 

@@ -13,6 +13,8 @@ import com.section11.mystock.data.service.StocksInformationService
 import com.section11.mystock.domain.repositories.StockWatchlistRepository
 import com.section11.mystock.domain.repositories.StocksInformationRepository
 import com.section11.mystock.domain.watchlist.StockWatchlistUseCase
+import com.section11.mystock.framework.featureflags.FeatureFlagManager
+import com.section11.mystock.framework.featureflags.LocalFeatureFlagManager
 import com.section11.mystock.framework.resource.ResourceProviderImpl
 import dagger.Binds
 import dagger.Module
@@ -82,6 +84,11 @@ abstract class MyStockModule {
 
         @Provides
         fun provideIODispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+        @Provides
+        fun provideFeatureFlagManager(): FeatureFlagManager {
+            return LocalFeatureFlagManager()
+        }
 
         @Provides
         fun provideStockInformationRemoteRepository(): StocksInformationRepository {
