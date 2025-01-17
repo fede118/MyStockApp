@@ -15,6 +15,6 @@ fun SingleStockViewRoute(stockSymbol: String?, singleStockViewModel: SingleStock
     }
 
     (uiState as? SingleStockViewModel.SingleStockUiState.Success)?.let { successState ->
-        SingleStockScreen(successState)
+        SingleStockScreen(successState.stockInformationUiModel)
     }
 }

@@ -45,8 +45,8 @@ class SingleStockViewModel @Inject constructor(
                 _uiState.update { SingleStockUiState.Error(apiErrorException.message) }
             }
         }
-
     }
+
     sealed class SingleStockUiState {
         data object Loading : SingleStockUiState()
         data class Success(val stockInformationUiModel: StockInformationUiModel) : SingleStockUiState()

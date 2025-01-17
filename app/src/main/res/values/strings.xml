@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">MyStock</string>
 
+    <!--  Stocks Watchlist  -->
+    <string name="watchlist_stock_tile">%s - %s</string>
+
     <!--  Single Stock Screen String  -->
     <string name="single_stock_screen_symbol_text">Symbol: %s</string>
     <string name="single_stock_screen_exchange_text">"Exchange: %s</string>
