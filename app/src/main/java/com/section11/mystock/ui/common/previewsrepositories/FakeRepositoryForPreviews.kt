@@ -11,7 +11,7 @@ import com.section11.mystock.framework.resource.ResourceProviderImpl
 import com.section11.mystock.ui.home.HomeViewModel.SingleStockInformationState
 import com.section11.mystock.ui.home.HomeViewModel.SingleStockInformationState.FetchedSingleStockInfo
 import com.section11.mystock.ui.model.StockInformationUiModel
-import com.section11.mystock.ui.model.WatchlistStockModel
+import com.section11.mystock.ui.model.WatchlistScreenUiModel
 import com.section11.mystock.ui.model.mapper.StockInformationUiModelMapper
 import com.section11.mystock.ui.model.mapper.StockWatchlistUiModelMapper
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +27,7 @@ class FakeRepositoryForPreviews(context: Context) {
     private val stockWatchlistUiModelMapper = StockWatchlistUiModelMapper(ResourceProviderImpl(context))
     private val singleStockUiMapper = StockInformationUiModelMapper(ResourceProviderImpl(context))
 
-    fun getStockWatchlist(size: Int = DEFAULT_STOCKS_LIST_SIZE): List<WatchlistStockModel> {
+    fun getStockWatchlist(size: Int = DEFAULT_STOCKS_LIST_SIZE): WatchlistScreenUiModel {
         val stocks = List(size) { index ->
             Stock("Microsoft $index", "MSFT")
         }

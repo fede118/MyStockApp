@@ -6,7 +6,6 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,8 +25,8 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import com.section11.mystock.framework.utils.DarkAndLightPreviews
@@ -38,35 +37,64 @@ import com.section11.mystock.ui.home.HomeViewModel.SingleStockInformationState.E
 import com.section11.mystock.ui.home.HomeViewModel.SingleStockInformationState.FetchedSingleStockInfo
 import com.section11.mystock.ui.home.HomeViewModel.SingleStockInformationState.Idle
 import com.section11.mystock.ui.home.HomeViewModel.SingleStockInformationState.Loading
+import com.section11.mystock.ui.home.events.WatchlistScreenEvent
+import com.section11.mystock.ui.home.search.SearchViewModel.SearchUiState
+import com.section11.mystock.ui.model.WatchlistScreenUiModel
 import com.section11.mystock.ui.model.WatchlistStockModel
 import com.section11.mystock.ui.singlestock.composables.SingleStockCardContent
 import com.section11.mystock.ui.theme.LocalSpacing
 import com.section11.mystock.ui.theme.MyStockTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 private const val NO_STOCK_SELECTED = -1
 private const val ANIM_DURATION = 300
 
 @Composable
+fun WatchlistScreen(
+    modifier: Modifier = Modifier,
+    stocksScreenUiModel: WatchlistScreenUiModel,
+    onEvent: (WatchlistScreenEvent) -> Unit,
+    singleStockInfoState: StateFlow<SingleStockInformationState>,
+    searchUiStateFlow: StateFlow<SearchUiState>
+) {
+    val spacing = LocalSpacing.current
+
+    Column {
+        StocksSearchBar(
+            hint = stocksScreenUiModel.searchHint,
+            onEvent = onEvent,
+            modifier = modifier.align(CenterHorizontally),
+            searchUiStateFlow = searchUiStateFlow
+        )
+        StockList(
+            modifier = modifier.padding(horizontal = spacing.medium),
+            stocksScreenUiModel = stocksScreenUiModel,
+            onEvent = onEvent,
+            singleStockInfoState = singleStockInfoState
+        )
+    }
+}
+
+@Composable
 fun StockList(
     modifier: Modifier = Modifier,
-    stocks: List<WatchlistStockModel>,
-    onStockTap: (WatchlistStockModel) -> Unit,
+    stocksScreenUiModel: WatchlistScreenUiModel,
+    onEvent: (WatchlistScreenEvent) -> Unit,
     singleStockInfoState: StateFlow<SingleStockInformationState>
 ) {
     var expandedCardIndex by remember { mutableIntStateOf(NO_STOCK_SELECTED) }
 
     val spacing = LocalSpacing.current
     LazyColumn {
-        item { SectionTitle("Your Watchlist") }
         item { Spacer(modifier.height(spacing.small)) }
-        items(stocks.size) { index ->
+        items(stocksScreenUiModel.stocks.size) { index ->
             StockRowItem(
-                modifier.padding(spacing.small),
-                stock = stocks[index],
+                modifier.padding(vertical = spacing.small),
+                stock = stocksScreenUiModel.stocks[index],
                 onStockTap = { stockWatchlist ->
                     expandedCardIndex = if (expandedCardIndex == index) NO_STOCK_SELECTED else index
-                    onStockTap(stockWatchlist)
+                    onEvent(WatchlistScreenEvent.StockTapped(stockWatchlist))
                 },
                 singleStockInfoState = singleStockInfoState,
                 isExpanded = index == expandedCardIndex
@@ -75,23 +103,7 @@ fun StockList(
     }
 }
 
-@Composable
-fun SectionTitle(title: String, modifier: Modifier = Modifier) {
-    val spacing = LocalSpacing.current
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.primaryContainer)
-            .padding(spacing.small)
-    ) {
-        Text(
-            style = MaterialTheme.typography.titleLarge,
-            modifier = modifier.padding(top = spacing.large),
-            text = title,
-            color = MaterialTheme.colorScheme.onPrimaryContainer
-        )
-    }
-}
+
 
 @Composable
 fun StockRowItem(
@@ -109,8 +121,8 @@ fun StockRowItem(
     ) {
         AnimatedVisibility(
             visible = !isExpanded,
-            enter = fadeIn(tween(ANIM_DURATION)) + expandVertically(
-                tween(ANIM_DURATION),
+            enter = fadeIn(
+                tween(ANIM_DURATION)) + expandVertically(tween(ANIM_DURATION),
                 expandFrom = Alignment.Top
             ),
             exit = fadeOut(tween(ANIM_DURATION)) + shrinkVertically(tween(ANIM_DURATION))
@@ -127,9 +139,9 @@ fun StockRowItem(
                     modifier = Modifier.align(Alignment.CenterVertically)
                 ) {
                     Text(
-                        text = "5%", // todo should come from service
+                        text = stock.percentageChange,
                         style = MaterialTheme.typography.bodyLarge,
-                        color = Color.Green,
+                        color = stock.percentageColor,
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -153,10 +165,12 @@ fun SingleStockInfoExpandedContent(singleStockInfoState: StateFlow<SingleStockIn
             )
         }
         is Idle -> Spacer(Modifier)
-        is Loading -> Box(modifier = Modifier.fillMaxWidth().padding(vertical = spacing.medium)) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center)
-            )
+        is Loading -> {
+            Box(modifier = Modifier.fillMaxWidth().padding(vertical = spacing.medium)) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
         }
     }
 }
@@ -167,10 +181,11 @@ fun HomeScreenStockListPreview() {
     val fakeRepo = FakeRepositoryForPreviews(LocalContext.current)
     MyStockTheme {
         Surface {
-            StockList(
-                stocks = fakeRepo.getStockWatchlist(),
-                onStockTap = {},
-                singleStockInfoState = fakeRepo.getSingleStockInfoStateSuccess()
+            WatchlistScreen(
+                stocksScreenUiModel = fakeRepo.getStockWatchlist(),
+                onEvent = {},
+                singleStockInfoState = fakeRepo.getSingleStockInfoStateSuccess(),
+                searchUiStateFlow = MutableStateFlow<SearchUiState>(SearchUiState.Idle)
             )
         }
     }

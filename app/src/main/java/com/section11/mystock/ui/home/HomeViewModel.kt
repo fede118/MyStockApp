@@ -13,7 +13,7 @@ import com.section11.mystock.ui.home.HomeViewModel.HomeUiState.Success
 import com.section11.mystock.ui.home.HomeViewModel.SingleStockInformationState.ErrorFetchingSingleStockInfo
 import com.section11.mystock.ui.home.HomeViewModel.SingleStockInformationState.FetchedSingleStockInfo
 import com.section11.mystock.ui.model.StockInformationUiModel
-import com.section11.mystock.ui.model.WatchlistStockModel
+import com.section11.mystock.ui.model.WatchlistScreenUiModel
 import com.section11.mystock.ui.model.mapper.StockInformationUiModelMapper
 import com.section11.mystock.ui.model.mapper.StockWatchlistUiModelMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -96,7 +96,7 @@ class HomeViewModel @Inject constructor(
     sealed class HomeUiState {
         data object Loading: HomeUiState()
         data class Error(val message: String?): HomeUiState()
-        data class Success(val stocks: List<WatchlistStockModel>): HomeUiState()
+        data class Success(val stocksScreenUiModel: WatchlistScreenUiModel): HomeUiState()
     }
 
     sealed class SingleStockInformationState {
