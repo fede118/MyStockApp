@@ -1,5 +1,6 @@
 package com.section11.mystock.ui.navigation
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -9,16 +10,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.section11.mystock.ui.home.HomeViewModel
+import com.section11.mystock.ui.home.search.SearchViewModel
 import com.section11.mystock.ui.navigation.MyStockNavigationActions.Companion.HOME_ROUTE
 import com.section11.mystock.ui.navigation.MyStockNavigationActions.Companion.SINGLE_STOCK_ROUTE
 import com.section11.mystock.ui.navigation.MyStockNavigationActions.Companion.SINGLE_STOCK_SYMBOL
-import com.section11.mystock.ui.home.HomeViewModel
 import com.section11.mystock.ui.singlestock.SingleStockViewModel
 
 @Composable
 fun MyStocksNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
+    snackbarHostState: SnackbarHostState,
     startDestination: String = HOME_ROUTE
 ) {
     val navigationActions = MyStockNavigationActions(navController)
@@ -31,7 +34,8 @@ fun MyStocksNavGraph(
             route = HOME_ROUTE
         )  { navBackStackEntry ->
             val homeViewModel = hiltViewModel<HomeViewModel>(navBackStackEntry)
-            HomeRoute(homeViewModel) { symbol ->
+            val searchViewModel = hiltViewModel<SearchViewModel>(navBackStackEntry)
+            HomeRoute(homeViewModel, searchViewModel, snackbarHostState) { symbol ->
                 navigationActions.navigateToSingleStockView(symbol)
             }
         }

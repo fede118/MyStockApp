@@ -2,7 +2,9 @@
     <string name="app_name">MyStock</string>
 
     <!--  Stocks Watchlist  -->
+    <string name="watchlist_search_hint">Search stock, symbol, ETF…</string>
     <string name="watchlist_stock_tile">%s - %s</string>
+    <string name="watchlist_stock_percentage">%s%%</string>
 
     <!--  Single Stock Screen String  -->
     <string name="single_stock_screen_symbol_text">Symbol: %s</string>

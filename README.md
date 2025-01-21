@@ -55,11 +55,12 @@ The application follows a clean architecture, separating concerns into distinct 
 
 ## Future Enhancements
 
-*   **Match Watchlist screen to single stock screen:** I want to have a more consistent UI maybe have the same card design but smaller with less info, and see the second screen on tap
 *   **Stock Search and Add to Watchlist:** Implement a search functionality (through and api) to allow users to find stocks and add them to their watchlist.
 *   **Watchlist screen should get % from service** Right now its mocked data I would like it to be from a service, but I don't want to make N calls to get percentages. I need to check if it can be fetched on bulk.
 *   **Error Handling:** Implement robust error handling for network requests, data parsing, and other potential issues, providing informative feedback to the user.
 *   **UI Compose Testing:** Address the current issues with running Compose tests to ensure the UI is thoroughly tested.
+*   **Custom backend:** I'll probably need my own backend to fetch information from different API's and maybe scrape some other info which I cant find an API for
+*   **Add market selection** For now the search for a single stock only works for NASDAQ. Its just a parameter on the search, it would be nice to have something on the home screen to change the market.
 
 ## Contact
 

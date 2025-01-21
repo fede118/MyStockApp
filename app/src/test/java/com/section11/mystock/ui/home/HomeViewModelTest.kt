@@ -10,9 +10,12 @@ import com.section11.mystock.ui.home.HomeViewModel.HomeUiState.Loading
 import com.section11.mystock.ui.home.HomeViewModel.HomeUiState.Success
 import com.section11.mystock.ui.home.HomeViewModel.SingleStockInformationState.FetchedSingleStockInfo
 import com.section11.mystock.ui.model.StockInformationUiModel
+import com.section11.mystock.ui.model.WatchlistScreenUiModel
 import com.section11.mystock.ui.model.WatchlistStockModel
 import com.section11.mystock.ui.model.mapper.StockInformationUiModelMapper
 import com.section11.mystock.ui.model.mapper.StockWatchlistUiModelMapper
+import com.section11.mystock.ui.theme.Green
+import com.section11.mystock.ui.theme.Red
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -77,11 +80,15 @@ class HomeViewModelTest {
             Stock(name = "Stock 2", symbol = "STK2")
         )
         val expectedStocks = listOf(
-            WatchlistStockModel(stockTitle = "Stock 1", symbol = "STK1"),
-            WatchlistStockModel(stockTitle = "Stock 2", symbol = "STK2")
+            WatchlistStockModel(stockTitle = "Stock 1", symbol = "STK1", "5%", Green),
+            WatchlistStockModel(stockTitle = "Stock 2", symbol = "STK2", "-2%", Red)
+        )
+        val uiModel = WatchlistScreenUiModel(
+            searchHint = "Search",
+            stocks = expectedStocks
         )
         whenever(stockWatchlistUseCase.getWatchlist()).thenReturn(flowOf(stocks))
-        whenever(stockWatchlistUiModelMapper.mapToUiModel(any())).thenReturn(expectedStocks)
+        whenever(stockWatchlistUiModelMapper.mapToUiModel(any())).thenReturn(uiModel)
 
         // When
         viewModel.getStocks()
@@ -89,7 +96,7 @@ class HomeViewModelTest {
 
         // Then
         verify(stockWatchlistUseCase).getWatchlist()
-        Assert.assertEquals(Success(expectedStocks), viewModel.uiState.value)
+        Assert.assertEquals(Success(uiModel), viewModel.uiState.value)
     }
 
     @Test
