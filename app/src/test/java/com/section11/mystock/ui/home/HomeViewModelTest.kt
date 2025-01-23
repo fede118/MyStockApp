@@ -1,14 +1,13 @@
 package com.section11.mystock.ui.home
 
 import com.section11.mystock.domain.StocksInformationUseCase
-import com.section11.mystock.domain.watchlist.StockWatchlistUseCase
 import com.section11.mystock.domain.models.Stock
 import com.section11.mystock.domain.models.StockInformation
+import com.section11.mystock.domain.watchlist.StockWatchlistUseCase
 import com.section11.mystock.framework.featureflags.FeatureFlagManager
-import com.section11.mystock.ui.home.HomeViewModel.HomeUiState
-import com.section11.mystock.ui.home.HomeViewModel.HomeUiState.Loading
-import com.section11.mystock.ui.home.HomeViewModel.HomeUiState.Success
-import com.section11.mystock.ui.home.HomeViewModel.SingleStockInformationState.FetchedSingleStockInfo
+import com.section11.mystock.ui.common.uistate.UiState
+import com.section11.mystock.ui.home.HomeViewModel.HomeUiState.WatchlistFetched
+import com.section11.mystock.ui.home.HomeViewModel.NavigationEvent.GetSingleStockInfo
 import com.section11.mystock.ui.model.StockInformationUiModel
 import com.section11.mystock.ui.model.WatchlistScreenUiModel
 import com.section11.mystock.ui.model.WatchlistStockModel
@@ -43,6 +42,18 @@ class HomeViewModelTest {
     private val stocksInformationUseCase: StocksInformationUseCase = mock()
     private val stockInformationUiModelMapper: StockInformationUiModelMapper = mock()
     private val featureFlagManager: FeatureFlagManager = mock()
+    private val stocks = listOf(
+        Stock(name = "Stock 1", symbol = "STK1"),
+        Stock(name = "Stock 2", symbol = "STK2")
+    )
+    private val expectedStocks = listOf(
+        WatchlistStockModel(stockTitle = "Stock 1", symbol = "STK1", "5%", Green),
+        WatchlistStockModel(stockTitle = "Stock 2", symbol = "STK2", "-2%", Red)
+    )
+    private val uiModel = WatchlistScreenUiModel(
+        searchHint = "Search",
+        stocks = expectedStocks
+    )
 
     private lateinit var viewModel: HomeViewModel
     private lateinit var stockWatchlistUseCase: StockWatchlistUseCase
@@ -51,11 +62,13 @@ class HomeViewModelTest {
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         stockWatchlistUseCase = mock()
+        // Given
+        whenever(stockWatchlistUseCase.getWatchlist()).thenReturn(flowOf(stocks))
+        whenever(stockWatchlistUiModelMapper.mapToUiModel(any())).thenReturn(uiModel)
+
         viewModel = HomeViewModel(
             stockWatchlistUseCase,
             stockWatchlistUiModelMapper,
-            stocksInformationUseCase,
-            stockInformationUiModelMapper,
             featureFlagManager,
             testDispatcher
         )
@@ -67,36 +80,13 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `initial state is loading`() = runTest {
-        // Expected
-        Assert.assertEquals(Loading, viewModel.uiState.value)
-    }
-
-    @Test
     fun `getStocks success`() = runTest {
-        // Given
-        val stocks = listOf(
-            Stock(name = "Stock 1", symbol = "STK1"),
-            Stock(name = "Stock 2", symbol = "STK2")
-        )
-        val expectedStocks = listOf(
-            WatchlistStockModel(stockTitle = "Stock 1", symbol = "STK1", "5%", Green),
-            WatchlistStockModel(stockTitle = "Stock 2", symbol = "STK2", "-2%", Red)
-        )
-        val uiModel = WatchlistScreenUiModel(
-            searchHint = "Search",
-            stocks = expectedStocks
-        )
-        whenever(stockWatchlistUseCase.getWatchlist()).thenReturn(flowOf(stocks))
-        whenever(stockWatchlistUiModelMapper.mapToUiModel(any())).thenReturn(uiModel)
-
         // When
-        viewModel.getStocks()
-        advanceUntilIdle()
+        advanceUntilIdle() // getStocks is called on init of viewModel
 
         // Then
         verify(stockWatchlistUseCase).getWatchlist()
-        Assert.assertEquals(Success(uiModel), viewModel.uiState.value)
+        Assert.assertEquals(WatchlistFetched(uiModel), viewModel.uiState.value)
     }
 
     @Test
@@ -135,7 +125,7 @@ class HomeViewModelTest {
         viewModel.onStockTap(null)
         advanceUntilIdle()
 
-        assert(viewModel.uiState.value is HomeUiState.Error)
+        assert(viewModel.uiState.value is UiState.Error)
     }
 
     @Test
@@ -156,7 +146,6 @@ class HomeViewModelTest {
         viewModel.onStockTap(symbol)
         advanceUntilIdle()
 
-        // Then
         // Then
         assertEquals(1, events.size)
         val event = events.first() as HomeViewModel.NavigationEvent.ToSingleStock
@@ -189,10 +178,9 @@ class HomeViewModelTest {
         advanceUntilIdle()
 
         // Then
-        // Then
-        assertEquals(0, events.size)
-        verify(stocksInformationUseCase).getStockInformation(symbol)
-        assertEquals(FetchedSingleStockInfo(mockStockInfoModel) , viewModel.singleStockInformationState.value)
+        assertEquals(1, events.size)
+        val event = events.first() as GetSingleStockInfo
+        assertEquals(symbol, event.symbol)
 
         // Cleanup
         job.cancel()

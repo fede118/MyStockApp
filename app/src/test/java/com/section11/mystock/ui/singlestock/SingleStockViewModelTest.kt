@@ -5,11 +5,10 @@ import com.section11.mystock.domain.StocksInformationUseCase
 import com.section11.mystock.domain.exceptions.ApiErrorException
 import com.section11.mystock.domain.exceptions.ResponseBodyNullException
 import com.section11.mystock.domain.models.StockInformation
+import com.section11.mystock.ui.common.uistate.UiState
 import com.section11.mystock.ui.model.StockInformationUiModel
 import com.section11.mystock.ui.model.mapper.StockInformationUiModelMapper
-import com.section11.mystock.ui.singlestock.SingleStockViewModel.SingleStockUiState.Success
-import com.section11.mystock.ui.singlestock.SingleStockViewModel.SingleStockUiState.Loading
-import com.section11.mystock.ui.singlestock.SingleStockViewModel.SingleStockUiState.Error
+import com.section11.mystock.ui.singlestock.SingleStockViewModel.SingleStockUiState.SingleStockFetched
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -61,7 +60,7 @@ class SingleStockViewModelTest {
     @Test
     fun `initial state is loading`() = runTest {
         // Expected
-        assertEquals(Loading, viewModel.uiState.value)
+        assertEquals(UiState.Loading, viewModel.uiState.value)
     }
 
     @Test
@@ -77,7 +76,7 @@ class SingleStockViewModelTest {
         advanceUntilIdle()
 
         // Then
-        assertEquals(Success(stockInformationUiModel), viewModel.uiState.value)
+        assertEquals(SingleStockFetched(stockInformationUiModel), viewModel.uiState.value)
     }
 
     @Test
@@ -91,7 +90,7 @@ class SingleStockViewModelTest {
         advanceUntilIdle()
 
         // Then
-        assertEquals(Error(exception.message), viewModel.uiState.value)
+        assertEquals(UiState.Error(exception.message), viewModel.uiState.value)
     }
 
     @Test
@@ -105,7 +104,7 @@ class SingleStockViewModelTest {
         advanceUntilIdle()
 
         // Then
-        assertEquals(Error(exception.message), viewModel.uiState.value)
+        assertEquals(UiState.Error(exception.message), viewModel.uiState.value)
     }
 
     @Test
@@ -115,6 +114,6 @@ class SingleStockViewModelTest {
         advanceUntilIdle()
 
         // Then
-        assertTrue(viewModel.uiState.value is Error)
+        assertTrue(viewModel.uiState.value is UiState.Error)
     }
 }

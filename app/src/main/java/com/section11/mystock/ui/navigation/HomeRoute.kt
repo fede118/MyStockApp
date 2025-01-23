@@ -1,9 +1,5 @@
 package com.section11.mystock.ui.navigation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -11,12 +7,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import com.section11.mystock.ui.common.composables.MyStockLoader
+import com.section11.mystock.ui.common.uistate.UiState
+import com.section11.mystock.ui.common.uistate.UiState.Error
+import com.section11.mystock.ui.common.uistate.UiState.Loading
 import com.section11.mystock.ui.home.HomeViewModel
-import com.section11.mystock.ui.home.HomeViewModel.HomeUiState.Error
-import com.section11.mystock.ui.home.HomeViewModel.HomeUiState.Loading
-import com.section11.mystock.ui.home.HomeViewModel.HomeUiState.Success
+import com.section11.mystock.ui.home.HomeViewModel.HomeUiState.WatchlistFetched
+import com.section11.mystock.ui.home.HomeViewModel.NavigationEvent.GetSingleStockInfo
 import com.section11.mystock.ui.home.HomeViewModel.NavigationEvent.ToSingleStock
 import com.section11.mystock.ui.home.composables.WatchlistScreen
 import com.section11.mystock.ui.home.events.WatchlistScreenEvent
@@ -25,7 +22,8 @@ import com.section11.mystock.ui.home.events.WatchlistScreenEvent.SearchPerformed
 import com.section11.mystock.ui.home.events.WatchlistScreenEvent.SearchResultTapped
 import com.section11.mystock.ui.home.events.WatchlistScreenEvent.StockTapped
 import com.section11.mystock.ui.home.search.SearchViewModel
-import com.section11.mystock.ui.home.search.SearchViewModel.SearchUiState.ShowSnackBar
+import com.section11.mystock.ui.home.search.SearchViewModel.SearchBarUiState.ShowSnackBar
+import com.section11.mystock.ui.singlestock.SingleStockViewModel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
@@ -33,6 +31,7 @@ import kotlinx.coroutines.launch
 fun HomeRoute(
     homeViewModel: HomeViewModel,
     searchViewModel: SearchViewModel,
+    singleStockViewModel: SingleStockViewModel,
     snackbarHostState: SnackbarHostState,
     navigateToSingleStock: (String) -> Unit
 ) {
@@ -40,23 +39,22 @@ fun HomeRoute(
     val searchUiState by searchViewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
 
-    LaunchedEffect(Unit) {
-        homeViewModel.getStocks()
-    }
-
     LaunchedEffect(homeViewModel.navigationEvent) {
         homeViewModel.navigationEvent.collect { event ->
             when (event) {
                 is ToSingleStock -> navigateToSingleStock(event.symbol)
+                is GetSingleStockInfo -> singleStockViewModel.getStockInformation(event.symbol)
             }
         }
     }
 
     LaunchedEffect(searchUiState) {
         when(searchUiState) {
-            is ShowSnackBar -> scope.launch {
-                val message = (searchUiState as ShowSnackBar).message
-                snackbarHostState.showSnackbar(message)
+            is ShowSnackBar -> {
+                scope.launch {
+                    val message = (searchUiState as ShowSnackBar).message
+                    snackbarHostState.showSnackbar(message)
+                }
             }
             else -> Unit
         }
@@ -65,12 +63,12 @@ fun HomeRoute(
     HomeScreenContent(
         homeUiState = homeUiState,
         searchUiStateFlow = searchViewModel.uiState,
-        homeViewModel = homeViewModel,
+        singleStockInfoState = singleStockViewModel.uiState,
         onEvent = { event ->
             when (event) {
                 is StockTapped -> homeViewModel.onStockTap(event.stock.symbol)
                 is SearchPerformed -> searchViewModel.onSearch(event.query)
-                is SearchResultTapped -> searchViewModel.onResultTapped(event.result)
+                is SearchResultTapped -> searchViewModel.onResultTapped(event.result.symbol)
                 is SearchBarClosed -> searchViewModel.onSearchBarClosed()
             }
         }
@@ -79,31 +77,19 @@ fun HomeRoute(
 
 @Composable
 private fun HomeScreenContent(
-    homeUiState: HomeViewModel.HomeUiState,
-    searchUiStateFlow: StateFlow<SearchViewModel.SearchUiState>,
-    homeViewModel: HomeViewModel,
+    homeUiState: UiState,
+    searchUiStateFlow: StateFlow<UiState>,
+    singleStockInfoState: StateFlow<UiState>,
     onEvent: (WatchlistScreenEvent) -> Unit
 ) {
     when (homeUiState) {
-        is Loading -> FullScreenLoading()
-        is Success -> WatchlistScreen(
+        is Loading -> MyStockLoader()
+        is WatchlistFetched -> WatchlistScreen(
             stocksScreenUiModel = homeUiState.stocksScreenUiModel,
             onEvent = onEvent,
-            singleStockInfoState = homeViewModel.singleStockInformationState,
+            singleStockInfoState = singleStockInfoState,
             searchUiStateFlow = searchUiStateFlow
         )
         is Error -> Text("Error: ${homeUiState.message}")
-    }
-}
-
-
-@Composable
-private fun FullScreenLoading() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .wrapContentSize(Alignment.Center)
-    ) {
-        CircularProgressIndicator()
     }
 }

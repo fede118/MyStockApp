@@ -26,7 +26,7 @@ fun StockInformationResponse.toStockInformation(): StockInformation {
     )
 }
 
-private fun SummaryResponse.toSummary(): Summary {
+fun SummaryResponse.toSummary(): Summary {
     return Summary(
         title = title,
         stock = stock,
@@ -37,7 +37,7 @@ private fun SummaryResponse.toSummary(): Summary {
     )
 }
 
-private fun PriceMovementResponse.toPriceMovement(): PriceMovement {
+fun PriceMovementResponse.toPriceMovement(): PriceMovement {
     return PriceMovement(
         percentage = percentage,
         value = value,
@@ -62,8 +62,13 @@ private fun List<GraphNodeResponse>.toGraphInformation(): GraphInformation {
     val graphNodes = this.map { it.toGraphNode() }
     return GraphInformation(
         graphNodes = graphNodes,
+        edgeLabels = graphNodes.getEdgeLabels(),
         horizontalAxisLabels = graphNodes.getHorizontalAxisLabels()
     )
+}
+
+private fun List<GraphNode>.getEdgeLabels(): Pair<String, String> {
+    return Pair(first().dateLabel, last().dateLabel)
 }
 
 /**

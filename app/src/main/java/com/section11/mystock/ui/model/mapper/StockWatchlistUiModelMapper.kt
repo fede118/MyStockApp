@@ -42,7 +42,7 @@ class StockWatchlistUiModelMapper@Inject constructor(
 
     private fun getStockPercentage(percentage: Double): String {
         return resourceProvider.getString(
-            R.string.watchlist_stock_percentage,
+            R.string.with_percentage,
             percentage.toPercentageFormat()
         )
     }

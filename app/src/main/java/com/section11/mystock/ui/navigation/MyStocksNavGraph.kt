@@ -35,7 +35,13 @@ fun MyStocksNavGraph(
         )  { navBackStackEntry ->
             val homeViewModel = hiltViewModel<HomeViewModel>(navBackStackEntry)
             val searchViewModel = hiltViewModel<SearchViewModel>(navBackStackEntry)
-            HomeRoute(homeViewModel, searchViewModel, snackbarHostState) { symbol ->
+            val singleStockViewModel = hiltViewModel<SingleStockViewModel>(navBackStackEntry)
+            HomeRoute(
+                homeViewModel,
+                searchViewModel,
+                singleStockViewModel,
+                snackbarHostState
+            ) { symbol ->
                 navigationActions.navigateToSingleStockView(symbol)
             }
         }
