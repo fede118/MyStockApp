@@ -14,8 +14,8 @@ data class SummaryResponse(
     val title: String,
     val stock: String,
     val exchange: String,
-    val price: String,
     val currency: String,
+    @SerializedName("extracted_price") val price: String,
     @SerializedName("price_movement") val priceMovement: PriceMovementResponse
 )
 

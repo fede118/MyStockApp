@@ -6,15 +6,12 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -31,16 +28,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import com.section11.mystock.framework.utils.DarkAndLightPreviews
 import com.section11.mystock.ui.common.composables.ExpandableStockCard
+import com.section11.mystock.ui.common.composables.MyStockLoader
 import com.section11.mystock.ui.common.previewsrepositories.FakeRepositoryForPreviews
-import com.section11.mystock.ui.home.HomeViewModel.SingleStockInformationState
-import com.section11.mystock.ui.home.HomeViewModel.SingleStockInformationState.ErrorFetchingSingleStockInfo
-import com.section11.mystock.ui.home.HomeViewModel.SingleStockInformationState.FetchedSingleStockInfo
-import com.section11.mystock.ui.home.HomeViewModel.SingleStockInformationState.Idle
-import com.section11.mystock.ui.home.HomeViewModel.SingleStockInformationState.Loading
+import com.section11.mystock.ui.common.uistate.UiState
+import com.section11.mystock.ui.common.uistate.UiState.Idle
+import com.section11.mystock.ui.common.uistate.UiState.Loading
 import com.section11.mystock.ui.home.events.WatchlistScreenEvent
-import com.section11.mystock.ui.home.search.SearchViewModel.SearchUiState
 import com.section11.mystock.ui.model.WatchlistScreenUiModel
 import com.section11.mystock.ui.model.WatchlistStockModel
+import com.section11.mystock.ui.singlestock.SingleStockViewModel.SingleStockUiState.SingleStockFetched
 import com.section11.mystock.ui.singlestock.composables.SingleStockCardContent
 import com.section11.mystock.ui.theme.LocalSpacing
 import com.section11.mystock.ui.theme.MyStockTheme
@@ -55,8 +51,8 @@ fun WatchlistScreen(
     modifier: Modifier = Modifier,
     stocksScreenUiModel: WatchlistScreenUiModel,
     onEvent: (WatchlistScreenEvent) -> Unit,
-    singleStockInfoState: StateFlow<SingleStockInformationState>,
-    searchUiStateFlow: StateFlow<SearchUiState>
+    singleStockInfoState: StateFlow<UiState>,
+    searchUiStateFlow: StateFlow<UiState>
 ) {
     val spacing = LocalSpacing.current
 
@@ -71,7 +67,7 @@ fun WatchlistScreen(
             modifier = modifier.padding(horizontal = spacing.medium),
             stocksScreenUiModel = stocksScreenUiModel,
             onEvent = onEvent,
-            singleStockInfoState = singleStockInfoState
+            singleStockInfo = singleStockInfoState
         )
     }
 }
@@ -81,7 +77,7 @@ fun StockList(
     modifier: Modifier = Modifier,
     stocksScreenUiModel: WatchlistScreenUiModel,
     onEvent: (WatchlistScreenEvent) -> Unit,
-    singleStockInfoState: StateFlow<SingleStockInformationState>
+    singleStockInfo: StateFlow<UiState>
 ) {
     var expandedCardIndex by remember { mutableIntStateOf(NO_STOCK_SELECTED) }
 
@@ -96,21 +92,19 @@ fun StockList(
                     expandedCardIndex = if (expandedCardIndex == index) NO_STOCK_SELECTED else index
                     onEvent(WatchlistScreenEvent.StockTapped(stockWatchlist))
                 },
-                singleStockInfoState = singleStockInfoState,
+                singleStockInfoState = singleStockInfo,
                 isExpanded = index == expandedCardIndex
             )
         }
     }
 }
 
-
-
 @Composable
 fun StockRowItem(
     modifier: Modifier = Modifier,
     stock: WatchlistStockModel,
     onStockTap: (WatchlistStockModel) -> Unit,
-    singleStockInfoState: StateFlow<SingleStockInformationState>,
+    singleStockInfoState: StateFlow<UiState>,
     isExpanded: Boolean
 ) {
     ExpandableStockCard(
@@ -151,27 +145,15 @@ fun StockRowItem(
 }
 
 @Composable
-fun SingleStockInfoExpandedContent(singleStockInfoState: StateFlow<SingleStockInformationState>) {
-    val singleStockInfo by singleStockInfoState.collectAsState()
-    val spacing = LocalSpacing.current
-
+fun SingleStockInfoExpandedContent(singleStockUiState: StateFlow<UiState>) {
+    val singleStockInfo by singleStockUiState.collectAsState()
     when (singleStockInfo) {
-        is ErrorFetchingSingleStockInfo -> {
-            Text("Error: ${(singleStockInfo as ErrorFetchingSingleStockInfo).message}")
-        }
-        is FetchedSingleStockInfo -> {
-            SingleStockCardContent(
-                stockInformationUiModel = (singleStockInfo as FetchedSingleStockInfo).stockInfo
-            )
-        }
-        is Idle -> Spacer(Modifier)
-        is Loading -> {
-            Box(modifier = Modifier.fillMaxWidth().padding(vertical = spacing.medium)) {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-        }
+        is UiState.Error -> Text("Error: ${(singleStockInfo as UiState.Error).message}")
+        is SingleStockFetched -> SingleStockCardContent(
+            stockInformationUiModel = (singleStockInfo as SingleStockFetched).stockInformationUiModel
+        )
+        is Idle -> @Composable {}
+        is Loading -> MyStockLoader()
     }
 }
 
@@ -185,7 +167,7 @@ fun HomeScreenStockListPreview() {
                 stocksScreenUiModel = fakeRepo.getStockWatchlist(),
                 onEvent = {},
                 singleStockInfoState = fakeRepo.getSingleStockInfoStateSuccess(),
-                searchUiStateFlow = MutableStateFlow<SearchUiState>(SearchUiState.Idle)
+                searchUiStateFlow = MutableStateFlow(Idle)
             )
         }
     }

@@ -22,8 +22,18 @@ data class PriceMovement(
     val movement: String
 )
 
+/**
+ * Represents the graph information.
+ *
+ * @property graphNodes are simply just the nodes on the graph
+ * @property edgeLabels are the labels to be shown on the edges of the graph at X. So at the
+ * start and the end of the graph, meaning the starting and finish points.
+ * @property horizontalAxisLabels are the labels to be shown at the bottom of the graph, under each
+ * inner line of the background grid. Because the edges are already taken care of by [graphEdgeLabels]
+ */
 data class GraphInformation(
     val graphNodes: List<GraphNode>,
+    val edgeLabels: Pair<String, String>,
     val horizontalAxisLabels: List<String>
 )
 

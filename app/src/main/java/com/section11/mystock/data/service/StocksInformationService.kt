@@ -1,6 +1,7 @@
 package com.section11.mystock.data.service
 
 import com.section11.mystock.data.dto.StockInformationResponse
+import com.section11.mystock.data.dto.StockSearchResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -15,4 +16,11 @@ interface StocksInformationService {
         @Query("q") query: String,
         @Query("engine") engine: String = "google_finance"
     ): Response<StockInformationResponse>
+
+    @GET(SEARCH_PATH)
+    suspend fun searchStock(
+        @Query("api_key") apiKey: String,
+        @Query("q") query: String,
+        @Query("engine") engine: String = "google_finance"
+    ): Response<StockSearchResponse>
 }

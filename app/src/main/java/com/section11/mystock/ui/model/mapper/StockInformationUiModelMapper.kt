@@ -50,7 +50,7 @@ class StockInformationUiModelMapper @Inject constructor(
     }
 
     private fun getPriceLabel(price: String, currency: String): String {
-        return resourceProvider.getString(R.string.single_stock_screen_price_text, price, currency)
+        return resourceProvider.getString(R.string.single_stock_screen_price_text, currency, price)
     }
 
     private fun getPriceMovementTitle(): String {
@@ -103,11 +103,14 @@ class StockInformationUiModelMapper @Inject constructor(
     }
 
     private fun getGraphModel(graphInformation: GraphInformation): GraphUiModel {
-        return GraphUiModel(
-            graphPoints = graphInformation.graphNodes.map { it.price },
-            graphHorizontalLabels = graphInformation.horizontalAxisLabels,
-            graphBackgroundVerticalLinesAmount = graphInformation.horizontalAxisLabels.size,
-            graphBackgroundHorizontalLinesAmount = DEFAULT_HORIZONTAL_LINES
-        )
+        return with(graphInformation) {
+            GraphUiModel(
+                graphPoints = graphNodes.map { it.price },
+                graphEdgeLabels = edgeLabels,
+                graphHorizontalLabels = horizontalAxisLabels,
+                graphGridVerticalLinesAmount = horizontalAxisLabels.size,
+                graphGridHorizontalLinesAmount = DEFAULT_HORIZONTAL_LINES
+            )
+        }
     }
 }

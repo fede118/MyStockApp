@@ -36,6 +36,7 @@ class StockInformationUiModelMapperTest {
 
     private val mockListOfPrices = List(DEFAULT_GRAPH_SIZE) { it.toDouble() }
     private val mockListOfLabels = listOf("Label 1", "Label 2", "Label 3")
+    private val mockEdgeLabels = Pair("Label 1", "Label 2")
 
     private lateinit var resourceProvider: ResourceProvider
     private lateinit var mapper: StockInformationUiModelMapper
@@ -44,50 +45,7 @@ class StockInformationUiModelMapperTest {
     fun setup() {
         resourceProvider = mock()
         mapper = StockInformationUiModelMapper(resourceProvider)
-        whenever(resourceProvider.getString(R.string.single_stock_screen_symbol_text, STOCK_SYMBOL))
-            .thenReturn(STOCK_SYMBOL)
-        whenever(resourceProvider.getString(R.string.single_stock_screen_exchange_text, STOCK_EXCHANGE))
-            .thenReturn(STOCK_EXCHANGE)
-        whenever(resourceProvider.getString(R.string.single_stock_screen_price_text, STOCK_PRICE, STOCK_CURRENCY))
-            .thenReturn("Price: $STOCK_PRICE $STOCK_CURRENCY")
-        whenever(resourceProvider.getString(R.string.single_stock_screen_price_movement_title))
-            .thenReturn(PRICE_MOVEMENT_TITLE)
-        whenever(resourceProvider.getString(R.string.single_stock_screen_arrow_up))
-            .thenReturn("↑")
-        whenever(resourceProvider.getString(R.string.single_stock_screen_arrow_down))
-            .thenReturn("↓")
-        whenever(
-            resourceProvider.getString(
-                eq(R.string.single_stock_screen_price_movement_label),
-                eq("↑"),
-                any()
-            )
-        ).thenReturn("↑ $PRICE_MOVEMENT_VALUE_UP")
-        whenever(
-            resourceProvider.getString(
-                eq(R.string.single_stock_screen_price_movement_label),
-                eq("↓"),
-                any()
-            )
-        ).thenReturn("↓ $PRICE_MOVEMENT_VALUE_DOWN")
-        whenever(resourceProvider.getString(R.string.single_stock_screen_plus))
-            .thenReturn("+")
-        whenever(resourceProvider.getString(R.string.single_stock_screen_minus))
-            .thenReturn("-")
-        whenever(
-            resourceProvider.getString(
-                R.string.single_stock_screen_price_movement_percentage,
-                "+",
-                PRICE_MOVEMENT_PERCENTAGE_UP.format(DEFAULT_DIGITS)
-            )
-        ).thenReturn("+ $PRICE_MOVEMENT_PERCENTAGE_UP%")
-        whenever(
-            resourceProvider.getString(
-                R.string.single_stock_screen_price_movement_percentage,
-                "-",
-                PRICE_MOVEMENT_PERCENTAGE_DOWN.format(DEFAULT_DIGITS)
-            )
-        ).thenReturn("- $PRICE_MOVEMENT_PERCENTAGE_DOWN%")
+        initResourceManagerStrings()
     }
 
     @Test
@@ -112,6 +70,7 @@ class StockInformationUiModelMapperTest {
                 GraphNode(mockListOfPrices[index], "Date $index")
             },
             horizontalAxisLabels = mockListOfLabels,
+            edgeLabels = mockEdgeLabels
         )
         val stockInformation = StockInformation(
             summary = summary,
@@ -195,6 +154,53 @@ class StockInformationUiModelMapperTest {
         assertEquals("↓ $PRICE_MOVEMENT_VALUE_DOWN", uiModel.priceMovementValueLabel)
         assertEquals("- $PRICE_MOVEMENT_PERCENTAGE_DOWN%", uiModel.priceMovementPercentage)
         assertEquals(Red, uiModel.priceMovementColor)
+    }
+
+    private fun initResourceManagerStrings() {
+        whenever(resourceProvider.getString(R.string.single_stock_screen_symbol_text, STOCK_SYMBOL))
+            .thenReturn(STOCK_SYMBOL)
+        whenever(resourceProvider.getString(R.string.single_stock_screen_exchange_text, STOCK_EXCHANGE))
+            .thenReturn(STOCK_EXCHANGE)
+        whenever(resourceProvider.getString(R.string.single_stock_screen_price_text, STOCK_CURRENCY, STOCK_PRICE))
+            .thenReturn("Price: $STOCK_PRICE $STOCK_CURRENCY")
+        whenever(resourceProvider.getString(R.string.single_stock_screen_price_movement_title))
+            .thenReturn(PRICE_MOVEMENT_TITLE)
+        whenever(resourceProvider.getString(R.string.single_stock_screen_arrow_up))
+            .thenReturn("↑")
+        whenever(resourceProvider.getString(R.string.single_stock_screen_arrow_down))
+            .thenReturn("↓")
+        whenever(
+            resourceProvider.getString(
+                eq(R.string.single_stock_screen_price_movement_label),
+                eq("↑"),
+                any()
+            )
+        ).thenReturn("↑ $PRICE_MOVEMENT_VALUE_UP")
+        whenever(
+            resourceProvider.getString(
+                eq(R.string.single_stock_screen_price_movement_label),
+                eq("↓"),
+                any()
+            )
+        ).thenReturn("↓ $PRICE_MOVEMENT_VALUE_DOWN")
+        whenever(resourceProvider.getString(R.string.single_stock_screen_plus))
+            .thenReturn("+")
+        whenever(resourceProvider.getString(R.string.single_stock_screen_minus))
+            .thenReturn("-")
+        whenever(
+            resourceProvider.getString(
+                R.string.single_stock_screen_price_movement_percentage,
+                "+",
+                PRICE_MOVEMENT_PERCENTAGE_UP.format(DEFAULT_DIGITS)
+            )
+        ).thenReturn("+ $PRICE_MOVEMENT_PERCENTAGE_UP%")
+        whenever(
+            resourceProvider.getString(
+                R.string.single_stock_screen_price_movement_percentage,
+                "-",
+                PRICE_MOVEMENT_PERCENTAGE_DOWN.format(DEFAULT_DIGITS)
+            )
+        ).thenReturn("- $PRICE_MOVEMENT_PERCENTAGE_DOWN%")
     }
 }
 

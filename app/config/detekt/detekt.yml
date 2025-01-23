@@ -135,7 +135,8 @@ complexity:
     constructorThreshold: 7
     ignoreDefaultParameters: false
     ignoreDataClasses: true
-    ignoreAnnotatedParameter: []
+    ignoreAnnotatedParameter: ["Composable", "ComposeHelperFunction"] # Ignore @Composable and @ComposeHelperFunction functions, Compose itself has many composables that break this rule.
+    ignoreAnnotated: ["Composable", "ComposeHelperFunction"] # Ignore @Composable and @ComposeHelperFunction functions, Compose itself has many composables that break this rule.
   MethodOverloading:
     active: false
     threshold: 6

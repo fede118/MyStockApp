@@ -5,6 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.section11.mystock.ui.singlestock.SingleStockViewModel
+import com.section11.mystock.ui.singlestock.SingleStockViewModel.SingleStockUiState.SingleStockFetched
 import com.section11.mystock.ui.singlestock.composables.SingleStockScreen
 
 @Composable
@@ -14,7 +15,7 @@ fun SingleStockViewRoute(stockSymbol: String?, singleStockViewModel: SingleStock
         singleStockViewModel.getStockInformation(stockSymbol)
     }
 
-    (uiState as? SingleStockViewModel.SingleStockUiState.Success)?.let { successState ->
+    (uiState as? SingleStockFetched)?.let { successState ->
         SingleStockScreen(successState.stockInformationUiModel)
     }
 }

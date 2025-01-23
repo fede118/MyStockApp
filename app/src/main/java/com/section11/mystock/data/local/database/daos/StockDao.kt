@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface StockDao {
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(stock: StockEntity)
 

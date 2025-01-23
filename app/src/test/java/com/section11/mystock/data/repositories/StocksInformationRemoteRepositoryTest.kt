@@ -2,7 +2,9 @@ package com.section11.mystock.data.repositories
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.section11.mystock.data.dto.StockInformationResponse
+import com.section11.mystock.data.dto.StockSearchResponse
 import com.section11.mystock.data.mappers.toStockInformation
+import com.section11.mystock.data.mappers.toStockSearchResults
 import com.section11.mystock.data.service.StocksInformationService
 import com.section11.mystock.domain.exceptions.ApiErrorException
 import com.section11.mystock.domain.exceptions.ResponseBodyNullException
@@ -102,5 +104,45 @@ class StocksInformationRemoteRepositoryTest {
 
         // When
         repository.getStockInformation("SYMBOL")
+    }
+
+    @Test
+    fun `searchStock return stock search results`() = runTest(testDispatcher) {
+        // Given
+        val query = "query"
+        val mockResponse: StockSearchResponse = mock()
+        mockkStatic("com.section11.mystock.data.mappers.SearchStockDataMapperKt")
+        every { mockResponse.toStockSearchResults() } returns mock()
+        val response: Response<StockSearchResponse> = mock()
+        whenever(response.isSuccessful).thenReturn(true)
+        whenever(response.body()).thenReturn(mockResponse)
+        whenever(stocksInformationService.searchStock(any(), any(), any())).thenReturn(response)
+
+        repository.searchStock(query)
+
+        verify(stocksInformationService).searchStock(apiKey, query)
+    }
+
+    @Test(expected = ResponseBodyNullException::class)
+    fun `searchStock response body null`() = runTest(testDispatcher) {
+        // Given
+        val response: Response<StockSearchResponse> = mock()
+        whenever(response.isSuccessful).thenReturn(true)
+        whenever(response.body()).thenReturn(null)
+        whenever(stocksInformationService.searchStock(any(), any(), any())).thenReturn(response)
+
+        // When
+        repository.searchStock("SYMBOL")
+    }
+
+    @Test(expected = ApiErrorException::class)
+    fun `searchStock api exception`() = runTest(testDispatcher) {
+        // Given
+        val errorResponse = "Not Found".toResponseBody()
+        val response = Response.error<StockSearchResponse>(404, errorResponse)
+        whenever(stocksInformationService.searchStock(any(), any(), any())).thenReturn(response)
+
+        // When
+        repository.searchStock("SYMBOL")
     }
 }

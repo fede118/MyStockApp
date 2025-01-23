@@ -28,7 +28,7 @@ class StockWatchlistUiModelMapperTest {
         val formatedStringMock = "Stock 1 (STK1)"
         whenever(resourceProvider.getString(any(), any(), any())).thenReturn(formatedStringMock)
         whenever(resourceProvider.getString(R.string.watchlist_search_hint)).thenReturn("hint")
-        whenever(resourceProvider.getString(eq(R.string.watchlist_stock_percentage),any()))
+        whenever(resourceProvider.getString(eq(R.string.with_percentage),any()))
             .thenReturn("5%")
         val name1 = "Stock 1"
         val name2 = "Stock 2"

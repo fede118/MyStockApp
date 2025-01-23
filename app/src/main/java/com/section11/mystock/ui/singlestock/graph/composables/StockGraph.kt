@@ -30,6 +30,7 @@ import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.TextUnit
+import com.section11.mystock.framework.utils.ComposeHelperFunction
 import com.section11.mystock.framework.utils.DarkAndLightPreviews
 import com.section11.mystock.ui.common.previewsrepositories.FakeRepositoryForPreviews
 import com.section11.mystock.ui.model.GraphUiModel
@@ -67,8 +68,8 @@ fun LineGraph(
     val animateProgress = remember {
         Animatable(INITIAL_ANIM_VALUE)
     }
-    val backgroundVerticalLines = graphUiModel.graphBackgroundVerticalLinesAmount ?: ZERO
-    val backgroundHorizontalLines = graphUiModel.graphBackgroundHorizontalLinesAmount ?: ZERO
+    val backgroundVerticalLines = graphUiModel.graphGridVerticalLinesAmount ?: ZERO
+    val backgroundHorizontalLines = graphUiModel.graphGridHorizontalLinesAmount ?: ZERO
 
     LaunchedEffect(key1 = graphUiModel.graphPoints) {
         animateProgress.animateTo(TARGET_ANIM_VALUE, tween(ANIM_DURATION))
@@ -95,7 +96,11 @@ fun LineGraph(
 
                     onDrawBehind {
                         drawBackgroundGrid(
-                            Pair(backgroundVerticalLines, backgroundHorizontalLines),
+                            verticalAndHorizontalLines = Pair(
+                                backgroundVerticalLines,
+                                backgroundHorizontalLines
+                            ),
+                            graphEdgeLabels = graphUiModel.graphEdgeLabels,
                             graphHorizontalLabels = graphUiModel.graphHorizontalLabels,
                             graphHorizontalLabelsPaddingTop = spacing.verySmall.toPx(),
                             stokeSize = dimens.smallest.toPx(),
@@ -112,11 +117,7 @@ fun LineGraph(
                         clipRect(right = widthValue) {
                             val brush = Brush.verticalGradient(listOf(Green40, Color.Transparent))
                             drawPath(path, Color.Green, style = Stroke(dimens.verySmall.toPx()))
-                            drawPath(
-                                path = filledPath,
-                                brush = brush,
-                                style = Fill
-                            )
+                            drawPath(path = filledPath, brush = brush, style = Fill)
                         }
                     }
                 }
@@ -152,17 +153,22 @@ private fun generatePath(data: List<Double>, size: Size): Path {
     return path
 }
 
+@ComposeHelperFunction
 private fun DrawScope.drawBackgroundGrid(
     verticalAndHorizontalLines: Pair<Int, Int>,
+    graphEdgeLabels: Pair<String, String>?,
     graphHorizontalLabels: List<String>? = null,
     graphHorizontalLabelsPaddingTop: Float,
     stokeSize: Float,
     textSize: TextUnit,
     textMeasurer: TextMeasurer
 ) {
-    drawRect(Color.Gray, style = Stroke(stokeSize))
-    val (backgroundVerticalLines: Int, backgroundHorizontalLines: Int) = verticalAndHorizontalLines
+    drawRect(color = Color.Gray, style = Stroke(stokeSize))
+    graphEdgeLabels?.let {
+        drawEdgeLabels(it, textSize, textMeasurer, graphHorizontalLabelsPaddingTop)
+    }
 
+    val (backgroundVerticalLines: Int, backgroundHorizontalLines: Int) = verticalAndHorizontalLines
     drawVerticalLines(
         backgroundVerticalLines = backgroundVerticalLines,
         barWidthPx = stokeSize,
@@ -175,6 +181,29 @@ private fun DrawScope.drawBackgroundGrid(
     drawHorizontalLines(
         backgroundHorizontalLines = backgroundHorizontalLines,
         barWidthPx = stokeSize
+    )
+}
+
+private fun DrawScope.drawEdgeLabels(
+    graphEdgeLabels: Pair<String, String>,
+    textSize: TextUnit,
+    textMeasurer: TextMeasurer,
+    graphHorizontalLabelsPaddingTop: Float
+) {
+    drawXAxisLabelCentered(
+        text = graphEdgeLabels.first,
+        textSize = textSize,
+        x = ZERO_F,
+        textMeasurer = textMeasurer,
+        paddingTop = graphHorizontalLabelsPaddingTop
+    )
+
+    drawXAxisLabelCentered(
+        text = graphEdgeLabels.second,
+        textSize = textSize,
+        x = size.width,
+        textMeasurer = textMeasurer,
+        paddingTop = graphHorizontalLabelsPaddingTop
     )
 }
 
@@ -197,7 +226,7 @@ private fun DrawScope.drawVerticalLines(
         )
 
         graphHorizontalLabels?.let {
-            drawXAxisLabelsCentered(
+            drawXAxisLabelCentered(
                 text = it[i],
                 textSize = textSize,
                 x = startX,
@@ -208,7 +237,7 @@ private fun DrawScope.drawVerticalLines(
     }
 }
 
-private fun DrawScope.drawXAxisLabelsCentered(
+private fun DrawScope.drawXAxisLabelCentered(
     text: String,
     textSize: TextUnit,
     x: Float,
