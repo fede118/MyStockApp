@@ -28,22 +28,39 @@ class DatabaseModule {
             "app_database"
         ).build().apply {
             // TODO remove this, when search functionality is done
-            stockDao().run {
-                CoroutineScope(Dispatchers.IO).launch {
-                    getStocksWatchlist().collect { result ->
-                        if(result.isEmpty()) {
-                            insert(StockEntity(name = "Apple Inc", symbol = "AAPL"))
-                            insert(StockEntity(name = "Tesla Inc", symbol = "TSLA"))
-                            insert(StockEntity(name = "Microsoft Corp", symbol = "MSFT"))
-                        }
-                    }
-                }
-            }
+            insertMockData(this)
         }
     }
 
     @Provides
     fun provideStockDao(appDatabase: MyStockDatabase): StockDao {
         return appDatabase.stockDao()
+    }
+
+    private fun insertMockData(database: MyStockDatabase) {
+        database.stockDao().run {
+            CoroutineScope(Dispatchers.IO).launch {
+                getStocksWatchlist().collect { result ->
+                    val defaultExchange = "NASDAQ"
+                    if (result.isEmpty()) {
+                        insert(StockEntity(
+                            name = "Apple Inc",
+                            symbol = "AAPL",
+                            exchange = defaultExchange
+                        ))
+                        insert(StockEntity(
+                            name = "Tesla Inc",
+                            symbol = "TSLA",
+                            exchange = defaultExchange
+                        ))
+                        insert(StockEntity(
+                            name = "Microsoft Corp",
+                            symbol = "MSFT",
+                            exchange = defaultExchange
+                        ))
+                    }
+                }
+            }
+        }
     }
 }

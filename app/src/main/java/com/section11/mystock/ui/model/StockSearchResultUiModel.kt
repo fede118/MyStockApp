@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.Color
 
 data class StockSearchResultUiModel(
     val title: String,
-    val symbol: String,
+    val symbolColonExchange: String,
     val symbolBoxColor: Color,
     val priceLabel: String,
     val priceMovementSymbol: String,

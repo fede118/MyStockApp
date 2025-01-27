@@ -1,8 +1,10 @@
 package com.section11.mystock.ui.model.mapper
 
+import com.section11.mystock.BuildConfig
 import com.section11.mystock.R
 import com.section11.mystock.common.resources.ResourceProvider
 import com.section11.mystock.domain.models.Stock
+import com.section11.mystock.framework.environment.EnvironmentManager
 import com.section11.mystock.ui.common.extentions.toPercentageFormat
 import com.section11.mystock.ui.model.WatchlistScreenUiModel
 import com.section11.mystock.ui.model.WatchlistStockModel
@@ -16,7 +18,8 @@ private const val PLUS_FIVE = 5.00
 private const val ZERO_DOUBLE = 0.00
 
 class StockWatchlistUiModelMapper@Inject constructor(
-    private val resourceProvider: ResourceProvider
+    private val resourceProvider: ResourceProvider,
+    private val environment: EnvironmentManager.Environment
 ) {
 
     fun mapToUiModel(stocks: List<Stock>): WatchlistScreenUiModel {
@@ -29,10 +32,12 @@ class StockWatchlistUiModelMapper@Inject constructor(
                 WatchlistStockModel(
                     stockTitle = getStockTitle(stock),
                     symbol = stock.symbol,
+                    exchange = stock.exchange,
                     percentageChange = getStockPercentage(percentage),
                     percentageColor = percentageColor
                 )
-            }
+            },
+            appVersionInfo = getAppVersionInfo()
         )
     }
 
@@ -45,5 +50,17 @@ class StockWatchlistUiModelMapper@Inject constructor(
             R.string.with_percentage,
             percentage.toPercentageFormat()
         )
+    }
+
+    private fun getAppVersionInfo(): String {
+        return if (BuildConfig.DEBUG) {
+            resourceProvider.getString(
+                R.string.app_version_info_debug,
+                environment.name,
+                environment.baseUrl
+            )
+        } else {
+            BuildConfig.VERSION_NAME
+        }
     }
 }

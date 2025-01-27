@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.section11.mystock.domain.StocksInformationUseCase
 import com.section11.mystock.domain.exceptions.ApiErrorException
+import com.section11.mystock.ui.common.navigation.NavigationManager
+import com.section11.mystock.ui.common.navigation.NavigationManager.NavigationEvent.ToSingleStock
 import com.section11.mystock.ui.common.uistate.UiState
 import com.section11.mystock.ui.model.StockSearchResultUiModel
 import com.section11.mystock.ui.model.mapper.StockSearchResultUiMapper
@@ -19,6 +21,7 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val stocksInformationUseCase: StocksInformationUseCase,
     private val stockSearchResultUiMapper: StockSearchResultUiMapper,
+    private val navigationManager: NavigationManager,
     private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -38,9 +41,10 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun onResultTapped(result: String) {
-        _uiState.value = SearchBarUiState.ShowSnackBar("Tapped: $result")
-        // todo navigate to single stock screen and or add them to watchlist
+    fun onResultTapped(result: StockSearchResultUiModel) {
+        viewModelScope.launch(dispatcher) {
+            navigationManager.navigate(ToSingleStock(result.symbolColonExchange))
+        }
     }
 
     fun onSearchBarClosed() {
@@ -48,7 +52,6 @@ class SearchViewModel @Inject constructor(
     }
 
     sealed class SearchBarUiState : UiState {
-        data class ShowSnackBar(val message: String) : SearchBarUiState()
         data class SearchResults(val results: List<StockSearchResultUiModel>) : SearchBarUiState()
     }
 }

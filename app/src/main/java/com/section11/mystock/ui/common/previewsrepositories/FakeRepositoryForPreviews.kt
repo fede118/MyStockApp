@@ -10,6 +10,7 @@ import com.section11.mystock.domain.models.Stock
 import com.section11.mystock.domain.models.StockInformation
 import com.section11.mystock.domain.models.StockSearchResults
 import com.section11.mystock.domain.models.Summary
+import com.section11.mystock.framework.environment.EnvironmentManager.Environment.Test
 import com.section11.mystock.framework.resource.ResourceProviderImpl
 import com.section11.mystock.ui.model.StockInformationUiModel
 import com.section11.mystock.ui.model.StockSearchResultUiModel
@@ -31,17 +32,15 @@ private const val DEFAULT_SEARCH_BAR_RESULTS = 7
 class FakeRepositoryForPreviews(context: Context) {
 
     private val resourceProvider = ResourceProviderImpl(context)
-    private val stockWatchlistUiModelMapper = StockWatchlistUiModelMapper(resourceProvider)
+    private val stockWatchlistUiModelMapper = StockWatchlistUiModelMapper(resourceProvider, Test)
     private val singleStockUiMapper = StockInformationUiModelMapper(resourceProvider)
     private val stockSearchUiModelMapper = StockSearchResultUiMapper(resourceProvider)
 
     fun getStockWatchlist(size: Int = DEFAULT_STOCKS_LIST_SIZE): WatchlistScreenUiModel {
         val stocks = List(size) { index ->
-            Stock("Microsoft $index", "MSFT")
+            Stock("Microsoft $index", "MSFT", "NASDAQ")
         }
         return stockWatchlistUiModelMapper.mapToUiModel(stocks)
-
-
     }
 
     fun getSingleStockInfoStateSuccess(): StateFlow<SingleStockViewModel.SingleStockUiState> {

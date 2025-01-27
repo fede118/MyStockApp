@@ -21,7 +21,8 @@ class RoomStockWatchlistRepository @Inject constructor(
     private fun StockEntity.toStock(): Stock {
         return Stock(
             name = name,
-            symbol = symbol
+            symbol = symbol,
+            exchange = exchange
         )
     }
 }

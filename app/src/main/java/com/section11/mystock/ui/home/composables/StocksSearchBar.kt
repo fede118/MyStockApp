@@ -128,12 +128,12 @@ fun SearchResultItem(
         modifier = modifier
             .fillMaxWidth()
             .padding(spacing.medium)
-            .clickable { onClick(result.symbol) },
+            .clickable { onClick(result.symbolColonExchange) },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = result.symbol,
+                text = result.symbolColonExchange,
                 style = MaterialTheme.typography.bodyMedium,
                 color = result.symbolBoxColor
             )

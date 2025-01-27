@@ -55,7 +55,7 @@ The application follows a clean architecture, separating concerns into distinct 
 
 ## Future Enhancements
 
-*   **Stock Search and Add to Watchlist:** Implement a search functionality (through and api) to allow users to find stocks and add them to their watchlist.
+*   **Stock Search and Add to Watchlist:** WIP: Implement a search functionality (through and api) to allow users to find stocks and add them to their watchlist.
 *   **Watchlist screen should get % from service** Right now its mocked data I would like it to be from a service, but I don't want to make N calls to get percentages. I need to check if it can be fetched on bulk.
 *   **Error Handling:** Implement robust error handling for network requests, data parsing, and other potential issues, providing informative feedback to the user.
 *   **UI Compose Testing:** Address the current issues with running Compose tests to ensure the UI is thoroughly tested.

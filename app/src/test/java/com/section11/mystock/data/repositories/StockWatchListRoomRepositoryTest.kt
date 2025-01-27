@@ -30,12 +30,12 @@ class StockWatchListRoomRepositoryTest {
     fun `getAllStocks returns correct list of stocks`() = runTest {
         // Given
         val stockEntities = listOf(
-            StockEntity(name = "Stock 1", symbol = "STK1"),
-            StockEntity(name = "Stock 2", symbol = "STK2")
+            StockEntity(name = "Stock 1", symbol = "STK1", exchange = "NASDAQ"),
+            StockEntity(name = "Stock 2", symbol = "STK2", exchange = "NYSE")
         )
         val expectedStocks = listOf(
-            Stock(name = "Stock 1", symbol = "STK1"),
-            Stock(name = "Stock 2", symbol = "STK2")
+            Stock(name = "Stock 1", symbol = "STK1", exchange = "NASDAQ"),
+            Stock(name = "Stock 2", symbol = "STK2", exchange = "NYSE")
         )
         whenever(stockDao.getStocksWatchlist()).thenReturn(flowOf(stockEntities))
 

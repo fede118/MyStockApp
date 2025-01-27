@@ -2,6 +2,7 @@ package com.section11.mystock.ui.model.mapper
 
 import com.section11.mystock.R
 import com.section11.mystock.common.resources.ResourceProvider
+import com.section11.mystock.domain.common.Const.COLON
 import com.section11.mystock.domain.models.CloseMatchStock
 import com.section11.mystock.domain.models.CloseMatchStockPriceMovement
 import com.section11.mystock.domain.models.PriceMovement
@@ -66,7 +67,7 @@ class StockSearchResultUiMapperTest {
         val expected = listOf(
             StockSearchResultUiModel(
                 title = expectedTitle,
-                symbol = expectedSymbol,
+                symbolColonExchange = expectedSymbol + COLON + expectedExchange,
                 symbolBoxColor = RedIntense,
                 priceLabel = expectedCurrency + expectedPrice,
                 priceMovementSymbol = "↑",
@@ -83,7 +84,7 @@ class StockSearchResultUiMapperTest {
         val closeMatchStocks = listOf(
             CloseMatchStock(
                 title = "Microsoft Corp.",
-                stock = "MSFT",
+                stock = "MSFT:NASDAQ",
                 currency = "$",
                 extractedPrice = "310.00",
                 priceMovement = CloseMatchStockPriceMovement(-1.2, "Down")
@@ -104,7 +105,7 @@ class StockSearchResultUiMapperTest {
         val expected = listOf(
             StockSearchResultUiModel(
                 title = "Microsoft Corp.",
-                symbol = "MSFT",
+                symbolColonExchange = "MSFT:NASDAQ",
                 symbolBoxColor = RedIntense,
                 priceLabel = "$310.00",
                 priceMovementSymbol = "↓",

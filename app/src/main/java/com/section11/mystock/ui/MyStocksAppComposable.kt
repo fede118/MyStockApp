@@ -28,7 +28,6 @@ fun MyStocksApp() {
             MyStocksNavGraph(
                 modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding()),
                 navController = navController,
-                snackbarHostState = snackbarHostState,
                 startDestination = HOME_ROUTE
             )
         }

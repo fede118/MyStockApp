@@ -6,9 +6,12 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,9 +29,11 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import com.section11.mystock.BuildConfig
 import com.section11.mystock.framework.utils.DarkAndLightPreviews
 import com.section11.mystock.ui.common.composables.ExpandableStockCard
 import com.section11.mystock.ui.common.composables.MyStockLoader
+import com.section11.mystock.ui.common.composables.SecretMenuShakeDetector
 import com.section11.mystock.ui.common.previewsrepositories.FakeRepositoryForPreviews
 import com.section11.mystock.ui.common.uistate.UiState
 import com.section11.mystock.ui.common.uistate.UiState.Idle
@@ -69,6 +74,24 @@ fun WatchlistScreen(
             onEvent = onEvent,
             singleStockInfo = singleStockInfoState
         )
+    }
+
+    if (BuildConfig.DEBUG) {
+        Box(
+            contentAlignment = Alignment.BottomCenter,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(spacing.small),
+                text = stocksScreenUiModel.appVersionInfo
+            )
+        }
+        SecretMenuShakeDetector {
+            onEvent(WatchlistScreenEvent.ShakeDetected)
+        }
     }
 }
 

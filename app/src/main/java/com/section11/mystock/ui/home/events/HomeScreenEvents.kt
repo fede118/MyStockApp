@@ -8,4 +8,5 @@ sealed class WatchlistScreenEvent {
     data class SearchPerformed(val query: String) : WatchlistScreenEvent()
     data class SearchResultTapped(val result: StockSearchResultUiModel) : WatchlistScreenEvent()
     data object SearchBarClosed : WatchlistScreenEvent()
+    data object ShakeDetected : WatchlistScreenEvent()
 }

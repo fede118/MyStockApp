@@ -2,6 +2,7 @@ package com.section11.mystock.di
 
 import com.section11.mystock.framework.environment.EnvironmentManager
 import com.section11.mystock.framework.environment.EnvironmentManager.Environment.Prod
+import com.section11.mystock.framework.environment.EnvironmentManager.Environment.Test
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -52,9 +53,9 @@ class NetworkModule {
     @Provides
     @Singleton
     @Named(PROD_RETROFIT)
-    fun provideProdRetrofit(environmentManager: EnvironmentManager): Retrofit {
+    fun provideProdRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(environmentManager.getProdBaseUrl())
+            .baseUrl(Prod.baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .client(provideOkHttpClient())
             .build()
@@ -63,9 +64,9 @@ class NetworkModule {
     @Provides
     @Singleton
     @Named(TEST_RETROFIT)
-    fun provideTestRetrofit(environmentManager: EnvironmentManager): Retrofit {
+    fun provideTestRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(environmentManager.getTestBaseUrl())
+            .baseUrl(Test.baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .client(provideOkHttpClient())
             .build()

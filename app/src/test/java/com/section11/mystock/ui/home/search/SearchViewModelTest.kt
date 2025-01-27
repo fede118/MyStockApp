@@ -2,6 +2,8 @@ package com.section11.mystock.ui.home.search
 
 import androidx.compose.ui.graphics.Color
 import com.section11.mystock.domain.StocksInformationUseCase
+import com.section11.mystock.ui.common.navigation.NavigationManager
+import com.section11.mystock.ui.common.navigation.NavigationManager.NavigationEvent.ToSingleStock
 import com.section11.mystock.ui.common.uistate.UiState
 import com.section11.mystock.ui.home.search.SearchViewModel.SearchBarUiState
 import com.section11.mystock.ui.model.StockSearchResultUiModel
@@ -19,6 +21,7 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.Mockito.mock
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
 private const val SEARCH_RESULT_SIZE = 5
@@ -30,6 +33,7 @@ class SearchViewModelTest {
 
     private val stocksInformationUseCase: StocksInformationUseCase = mock()
     private val stockSearchResultUiMapper: StockSearchResultUiMapper = mock()
+    private val navigationManager: NavigationManager = mock()
     private val testDispatcher = StandardTestDispatcher()
 
     @Before
@@ -38,6 +42,7 @@ class SearchViewModelTest {
         searchViewModel = SearchViewModel(
             stocksInformationUseCase,
             stockSearchResultUiMapper,
+            navigationManager,
             testDispatcher
         )
     }
@@ -63,7 +68,7 @@ class SearchViewModelTest {
             assertEquals(expectedResult.size, results.size)
             for(i in expectedResult.indices) {
                 assertEquals(expectedResult[i].title, results[i].title)
-                assertEquals(expectedResult[i].symbol, results[i].symbol)
+                assertEquals(expectedResult[i].symbolColonExchange, results[i].symbolColonExchange)
                 assertEquals(expectedResult[i].symbolBoxColor, results[i].symbolBoxColor)
                 assertEquals(expectedResult[i].priceMovementColor, results[i].priceMovementColor)
                 assertEquals(expectedResult[i].percentage, results[i].percentage)
@@ -82,10 +87,14 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun `when search result is tapped then should show snackbar`() {
-        searchViewModel.onResultTapped("any result")
+    fun `when search result is tapped then should show snackbar`() = runTest {
+        //Given
+        val stock = getSearchResultMockList(1).first()
 
-        assert(searchViewModel.uiState.value is SearchBarUiState.ShowSnackBar)
+        searchViewModel.onResultTapped(stock)
+        advanceUntilIdle()
+
+        verify(navigationManager).navigate(ToSingleStock(stock.symbolColonExchange))
     }
 
     private fun getSearchResultMockList(
@@ -94,7 +103,7 @@ class SearchViewModelTest {
         return List(size) {
             StockSearchResultUiModel(
                 title = "title",
-                symbol = "symbol",
+                symbolColonExchange = "symbol:exchange",
                 symbolBoxColor = Color.Black,
                 priceLabel = "priceLabel",
                 priceMovementSymbol = "priceMovementSymbol",

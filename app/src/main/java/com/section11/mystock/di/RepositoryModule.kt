@@ -29,19 +29,15 @@ abstract class RepositoryModule {
             environmentManager: EnvironmentManager,
             retrofit: Retrofit
         ): StocksInformationRepository {
-            val (apiKey, market) = if (environmentManager.currentEnvironment == Prod) {
-                Pair(
-                    BuildConfig.SERP_API_KEY,
-                    BuildConfig.SERP_API_DEFAULT_MARKET
-                )
+            val apiKey = if (environmentManager.currentEnvironment == Prod) {
+                BuildConfig.SERP_API_KEY
             } else {
-                Pair(String(), String())
+                String()
             }
             val service = retrofit.create(StocksInformationService::class.java)
             return StocksInformationRemoteRepository(
                 service,
-                apiKey,
-                market
+                apiKey
             )
         }
     }

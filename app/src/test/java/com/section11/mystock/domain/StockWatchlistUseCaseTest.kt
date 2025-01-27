@@ -27,8 +27,8 @@ class StockWatchlistUseCaseTest {
     fun `getWatchlist should return stocks from repository`() = runTest {
         // Arrange
         val expectedStocks = listOf(
-            Stock(name = "Stock 1", symbol = "STK1"),
-            Stock(name = "Stock 2", symbol = "STK2")
+            Stock(name = "Stock 1", symbol = "STK1", exchange = "NASDAQ"),
+            Stock(name = "Stock 2", symbol = "STK2", exchange = "NYSE")
         )
         whenever(stockWatchlistRepository.getAllStocks()).thenReturn(flowOf(expectedStocks))
 
