@@ -7,20 +7,24 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 private const val SEARCH_PATH = "search"
+private const val API_KEY = "api_key"
+private const val QUERY = "q"
+private const val ENGINE = "engine"
+private const val DEFAULT_ENGINE = "google_finance"
 
 interface StocksInformationService {
 
     @GET(SEARCH_PATH)
     suspend fun getStockInformation(
-        @Query("api_key") apiKey: String,
-        @Query("q") query: String,
-        @Query("engine") engine: String = "google_finance"
+        @Query(API_KEY) apiKey: String,
+        @Query(QUERY) query: String,
+        @Query(ENGINE) engine: String = DEFAULT_ENGINE
     ): Response<StockInformationResponse>
 
     @GET(SEARCH_PATH)
     suspend fun searchStock(
-        @Query("api_key") apiKey: String,
-        @Query("q") query: String,
-        @Query("engine") engine: String = "google_finance"
+        @Query(API_KEY) apiKey: String,
+        @Query(QUERY) query: String,
+        @Query(ENGINE) engine: String = DEFAULT_ENGINE
     ): Response<StockSearchResponse>
 }

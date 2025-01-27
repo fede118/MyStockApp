@@ -28,6 +28,7 @@ android {
         buildConfigField("String", "SERP_API_KEY", "\"${project.findProperty("serpApiKey") ?: ""}\"")
         buildConfigField("String", "SERP_API_BASE_URL", "\"${project.findProperty("serpApiBaseUrl") ?: ""}\"")
         buildConfigField("String", "SERP_API_DEFAULT_MARKET", "\"${project.findProperty("serpApiDefaultMarket") ?: ""}\"")
+        buildConfigField("String", "TEST_API_BASE_URL", "\"${project.findProperty("apiaryTestUrl") ?: ""}\"")
     }
 
     buildTypes {
@@ -142,6 +143,7 @@ tasks.create("jacocoTestReport", JacocoReport::class.java) {
         "**/database/**/*.*",
         "**/navigation/**/*.*",
         "**/previewsrepositories/**/*.*",
+        "**/secretmenu/**/*.*",
         "**/composables/**", // exclude files in composable folders
         "**/*Composable*.*", // exclude files with "composable" in their name
         "**/*Composable*.*", // exclude files with "composable" in their name

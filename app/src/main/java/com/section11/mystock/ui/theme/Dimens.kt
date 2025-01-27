@@ -11,7 +11,8 @@ data class Dimens(
     val small: Dp = 4.dp,
     val default: Dp = 8.dp,
 
-    val textMedium: TextUnit = 10.sp,
-    val textLarge: TextUnit = 14.sp,
-    val textExtraLarge: TextUnit = 16.sp,
+    val textVerySmall: TextUnit = 10.sp,
+    val textSmall: TextUnit = 14.sp,
+    val textMediumSmall: TextUnit = 16.sp,
+    val textExtraLarge: TextUnit = 24.sp
 )

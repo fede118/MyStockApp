@@ -63,6 +63,12 @@ class HomeViewModel @Inject constructor(
             }
     }
 
+    fun onShakeDetected() {
+        viewModelScope.launch(dispatcher) {
+            _navigationEvent.emit(NavigationEvent.ToSecretMenu)
+        }
+    }
+
     sealed class HomeUiState : UiState {
         data class WatchlistFetched(val stocksScreenUiModel: WatchlistScreenUiModel): HomeUiState()
     }
@@ -70,5 +76,6 @@ class HomeViewModel @Inject constructor(
     sealed class NavigationEvent {
         data class ToSingleStock(val symbol: String) : NavigationEvent()
         data class GetSingleStockInfo(val symbol: String) : NavigationEvent()
+        data object ToSecretMenu: NavigationEvent()
     }
 }

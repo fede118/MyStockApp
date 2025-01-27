@@ -156,13 +156,13 @@ fun SearchResultItem(
         ) {
             Text(
                 text = result.priceMovementSymbol,
-                fontSize = dimens.textExtraLarge,
+                fontSize = dimens.textMediumSmall,
                 color = result.priceMovementColor,
                 modifier = Modifier.padding(end = spacing.extraSmall).alignByBaseline()
             )
             Text(
                 text = result.percentage,
-                fontSize = dimens.textLarge,
+                fontSize = dimens.textSmall,
                 color = result.priceMovementColor
             )
         }
