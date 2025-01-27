@@ -104,7 +104,7 @@ fun LineGraph(
                             graphHorizontalLabels = graphUiModel.graphHorizontalLabels,
                             graphHorizontalLabelsPaddingTop = spacing.verySmall.toPx(),
                             stokeSize = dimens.smallest.toPx(),
-                            textSize = dimens.textMedium,
+                            textSize = dimens.textVerySmall,
                             textMeasurer = textMeasurer
                         )
 
