@@ -47,13 +47,12 @@ class StocksInformationRemoteRepositoryTest {
 
     private val symbol = "SYMBOL"
     private val apiKey = "API_KEY"
-    private val defaultMarket = "market"
 
     @Before
     fun setup() {
         MockitoAnnotations.openMocks(this)
         Dispatchers.setMain(testDispatcher)
-        repository = StocksInformationRemoteRepository(stocksInformationService, apiKey, defaultMarket)
+        repository = StocksInformationRemoteRepository(stocksInformationService, apiKey)
     }
 
     @After
@@ -77,7 +76,7 @@ class StocksInformationRemoteRepositoryTest {
         val result = repository.getStockInformation(symbol)
 
         // Then
-        verify(stocksInformationService).getStockInformation(apiKey, symbol + defaultMarket)
+        verify(stocksInformationService).getStockInformation(apiKey, symbol)
         assertTrue(result is StockInformation)
         // No need to check for the information being mapped thats already tested in
         // StockInformationDataMapper

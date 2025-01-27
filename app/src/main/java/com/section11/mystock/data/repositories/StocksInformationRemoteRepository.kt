@@ -12,14 +12,13 @@ import javax.inject.Inject
 class StocksInformationRemoteRepository @Inject constructor(
     private val stocksInformationService: StocksInformationService,
     private val apiKey: String,
-    private val market: String
 ): StocksInformationRepository {
 
-    override suspend fun getStockInformation(symbol: String): StockInformation {
+    override suspend fun getStockInformation(symbolColonExchange: String): StockInformation {
         val stockInformationResponse = safeApiCall {
             stocksInformationService.getStockInformation(
                 apiKey,
-                symbol + market
+                symbolColonExchange
             )
         }
 

@@ -4,6 +4,7 @@
     <!--  Stocks Watchlist  -->
     <string name="watchlist_search_hint">Search stock, symbol, ETF…</string>
     <string name="watchlist_stock_tile">%s - %s</string>
+    <string name="app_version_info_debug">Debug Version - Environment: %s - %s</string>
 
     <!--  Search Bar results strings  -->
     <string name="search_bar_results_up_arrow">↑</string>

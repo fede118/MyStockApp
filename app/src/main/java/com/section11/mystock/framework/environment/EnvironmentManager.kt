@@ -10,40 +10,34 @@ private const val PROD_STRING = "Prod"
 private const val TEST_STRING = "Test"
 
 @Singleton
-class EnvironmentManager @Inject constructor(
-    private val sharedPreferences: SharedPreferences
-) {
+class EnvironmentManager @Inject constructor(private val sharedPreferences: SharedPreferences) {
 
     var currentEnvironment: Environment
         get() {
-            // Retrieve the saved environment or default to Prod
             val environmentName = sharedPreferences.getString(ENVIRONMENT_KEY, Environment.Test.name)
             return Environment.fromString(environmentName ?: Environment.Test.name)
         }
         set(value) {
-            // Save the current environment to SharedPreferences
             sharedPreferences.edit().putString(ENVIRONMENT_KEY, value.name).apply()
         }
-    // Set the environment directly (e.g., from a UI or other parts of the app)
+
     fun setEnvironment(environment: Environment) {
         currentEnvironment = environment
     }
 
-    fun getProdBaseUrl() = BuildConfig.SERP_API_BASE_URL
-
-    fun getTestBaseUrl() = BuildConfig.TEST_API_BASE_URL
-
     sealed class Environment {
         data object Prod : Environment(){
-            override val name: String
-                get() = PROD_STRING
+            override val name = PROD_STRING
+            override val baseUrl = BuildConfig.SERP_API_BASE_URL
         }
         data object Test : Environment() {
-            override val name: String
-                get() = TEST_STRING
+            override val name: String = TEST_STRING
+            override val baseUrl = BuildConfig.TEST_API_BASE_URL
         }
 
         abstract val name: String
+
+        abstract val baseUrl: String
 
         companion object {
             fun fromString(value: String): Environment {

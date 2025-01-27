@@ -1,6 +1,5 @@
 package com.section11.mystock.ui.navigation
 
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -26,7 +25,6 @@ import com.section11.mystock.ui.singlestock.SingleStockViewModel
 fun MyStocksNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    snackbarHostState: SnackbarHostState,
     startDestination: String = HOME_ROUTE
 ) {
     val navigationActions = MyStockNavigationActions(navController)
@@ -47,11 +45,12 @@ fun MyStocksNavGraph(
                 homeViewModel = homeViewModel,
                 searchViewModel = searchViewModel,
                 singleStockViewModel = singleStockViewModel,
-                snackbarHostState = snackbarHostState,
                 navigateToSingleStock = { symbol ->
                     navigationActions.navigateToSingleStockView(symbol)
                 },
-                navigateToSecretMenu = { navigationActions.navigateToSecretMenu() }
+                navigateToSecretMenu = {
+                    navigationActions.navigateToSecretMenu()
+                }
             )
         }
 

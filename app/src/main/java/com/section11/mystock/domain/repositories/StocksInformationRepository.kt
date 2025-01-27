@@ -14,9 +14,10 @@ import com.section11.mystock.domain.models.StockSearchResults
 interface StocksInformationRepository {
 
     /**
-     * Gets the stock information for the given [symbol]. The symbol needs to be exact and correct.
+     * Gets the stock information for the given [symbolColonExchange]. The symbol needs to be exact and correct.
+     * with this format symbol:exchange Ex: AAPL:NASDAQ
      */
-    suspend fun getStockInformation(symbol: String): StockInformation
+    suspend fun getStockInformation(symbolColonExchange: String): StockInformation
 
     /**
      * Searches for the stock with the given [query]. In this one the query can be less precise.
