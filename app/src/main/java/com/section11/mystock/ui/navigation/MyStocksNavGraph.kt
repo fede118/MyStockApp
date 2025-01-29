@@ -24,6 +24,7 @@ import com.section11.mystock.ui.singlestock.SingleStockViewModel
 @Composable
 fun MyStocksNavGraph(
     modifier: Modifier = Modifier,
+    onBottomBarChange: (@Composable () -> Unit) -> Unit,
     navController: NavHostController = rememberNavController(),
     startDestination: String = HOME_ROUTE
 ) {
@@ -50,7 +51,8 @@ fun MyStocksNavGraph(
                 },
                 navigateToSecretMenu = {
                     navigationActions.navigateToSecretMenu()
-                }
+                },
+                onBottomBarChange = onBottomBarChange
             )
         }
 

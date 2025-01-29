@@ -34,6 +34,8 @@ class StockWatchlistUiModelMapperTest {
             .thenReturn("5%")
         whenever(environment.name).thenReturn("name")
         whenever(environment.baseUrl).thenReturn("baseUrl")
+        whenever(resourceProvider.getString(R.string.app_version_info_debug, environment.name))
+            .thenReturn("appVersionInfo")
         val name1 = "Stock 1"
         val name2 = "Stock 2"
         val symbol1 = "STK1"

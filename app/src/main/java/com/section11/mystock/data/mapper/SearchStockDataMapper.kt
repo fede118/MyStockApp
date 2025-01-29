@@ -1,4 +1,4 @@
-package com.section11.mystock.data.mappers
+package com.section11.mystock.data.mapper
 
 import com.section11.mystock.data.dto.CloseMatchPriceMovementResponse
 import com.section11.mystock.data.dto.CloseMatchStockResponse

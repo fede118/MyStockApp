@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.TextUnit
 import com.section11.mystock.framework.utils.ComposeHelperFunction
 import com.section11.mystock.framework.utils.DarkAndLightPreviews
 import com.section11.mystock.ui.common.previewsrepositories.FakeRepositoryForPreviews
-import com.section11.mystock.ui.model.GraphUiModel
+import com.section11.mystock.ui.model.StockInformationUiModel.GraphUiModel
 import com.section11.mystock.ui.theme.Green40
 import com.section11.mystock.ui.theme.LocalDimens
 import com.section11.mystock.ui.theme.LocalSpacing
@@ -103,8 +103,8 @@ fun LineGraph(
                             graphEdgeLabels = graphUiModel.graphEdgeLabels,
                             graphHorizontalLabels = graphUiModel.graphHorizontalLabels,
                             graphHorizontalLabelsPaddingTop = spacing.verySmall.toPx(),
-                            stokeSize = dimens.smallest.toPx(),
-                            textSize = dimens.textVerySmall,
+                            stokeSize = dimens.mOctave.toPx(),
+                            textSize = dimens.textSmallest,
                             textMeasurer = textMeasurer
                         )
 
@@ -116,7 +116,7 @@ fun LineGraph(
                         }
                         clipRect(right = widthValue) {
                             val brush = Brush.verticalGradient(listOf(Green40, Color.Transparent))
-                            drawPath(path, Color.Green, style = Stroke(dimens.verySmall.toPx()))
+                            drawPath(path, Color.Green, style = Stroke(dimens.mQuarter.toPx()))
                             drawPath(path = filledPath, brush = brush, style = Fill)
                         }
                     }

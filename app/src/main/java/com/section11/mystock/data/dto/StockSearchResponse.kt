@@ -2,6 +2,7 @@ package com.section11.mystock.data.dto
 
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
+import com.section11.mystock.data.dto.StockInformationResponse.SummaryResponse
 
 @Keep
 data class StockSearchResponse(

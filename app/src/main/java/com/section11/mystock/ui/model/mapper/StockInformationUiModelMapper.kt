@@ -3,13 +3,25 @@ package com.section11.mystock.ui.model.mapper
 import androidx.compose.ui.graphics.Color
 import com.section11.mystock.R
 import com.section11.mystock.common.resources.ResourceProvider
-import com.section11.mystock.domain.models.GraphInformation
 import com.section11.mystock.domain.models.StockInformation
+import com.section11.mystock.domain.models.StockInformation.GraphInformation
+import com.section11.mystock.domain.models.StockInformation.KnowledgeGraph
+import com.section11.mystock.domain.models.StockInformation.Summary
 import com.section11.mystock.ui.common.extentions.toPercentageFormat
-import com.section11.mystock.ui.model.GraphUiModel
+import com.section11.mystock.ui.common.model.SnackBarModel
 import com.section11.mystock.ui.model.StockInformationUiModel
+import com.section11.mystock.ui.model.StockInformationUiModel.GraphUiModel
+import com.section11.mystock.ui.model.StockInformationUiModel.KnowledgeGraphUiModel
+import com.section11.mystock.ui.model.StockInformationUiModel.KnowledgeGraphUiModel.AboutUiModel.DescriptionUiModel
+import com.section11.mystock.ui.model.StockInformationUiModel.KnowledgeGraphUiModel.AboutUiModel.InfoUiModel
+import com.section11.mystock.ui.model.StockInformationUiModel.KnowledgeGraphUiModel.KeyStatsUiModel
+import com.section11.mystock.ui.model.StockInformationUiModel.KnowledgeGraphUiModel.KeyStatsUiModel.StatUiModel
+import com.section11.mystock.ui.model.StockInformationUiModel.KnowledgeGraphUiModel.KeyStatsUiModel.TagUiModel
+import com.section11.mystock.ui.model.StockInformationUiModel.KnowledgeGraphUiModel.KeyStatsUiModel.ClimateChangeScoreUiModel
+import com.section11.mystock.ui.model.StockInformationUiModel.SummaryUiModel
 import com.section11.mystock.ui.theme.Green
 import com.section11.mystock.ui.theme.Red
+import com.section11.mystock.ui.theme.gray50
 import javax.inject.Inject
 
 private const val MOVEMENT_UP = "Up"
@@ -20,8 +32,16 @@ class StockInformationUiModelMapper @Inject constructor(
 ) {
 
     fun mapToUiModel(stockInformation: StockInformation): StockInformationUiModel {
-        return with(stockInformation.summary) {
-            StockInformationUiModel(
+        return StockInformationUiModel(
+            summaryUiModel = getSummaryUiModel(stockInformation.summary),
+            graphModel = getGraphModel(stockInformation.graph),
+            knowledgeGraph = getKnowledgeGraph(stockInformation.knowledgeGraph)
+        )
+    }
+
+    private fun getSummaryUiModel(summary: Summary): SummaryUiModel {
+        return with(summary) {
+            SummaryUiModel(
                 title = title,
                 stockSymbolLabel = getStockSymbolLabel(stock),
                 exchangeLabel = getExchangeLabel(exchange),
@@ -35,8 +55,7 @@ class StockInformationUiModelMapper @Inject constructor(
                     priceMovement.movement,
                     priceMovement.percentage
                 ),
-                priceMovementColor = getPriceMovementColor(priceMovement.movement),
-                graphModel = getGraphModel(stockInformation.graph)
+                priceMovementColor = getPriceMovementColor(priceMovement.movement)
             )
         }
     }
@@ -112,5 +131,63 @@ class StockInformationUiModelMapper @Inject constructor(
                 graphGridHorizontalLinesAmount = DEFAULT_HORIZONTAL_LINES
             )
         }
+    }
+
+    private fun getKnowledgeGraph(knowledgeGraph: KnowledgeGraph): KnowledgeGraphUiModel {
+        return KnowledgeGraphUiModel(
+            keyStats = KeyStatsUiModel(
+                stats = knowledgeGraph.keyStats.stats.map {
+                    StatUiModel(
+                        label = it.label,
+                        description = it.description,
+                        value = it.value
+                    )
+                },
+                tags = knowledgeGraph.keyStats.tags.map {
+                    TagUiModel(
+                        text = it.text,
+                        description = it.description,
+                        link = it.link,
+                        tagColor = gray50,
+                        onTapSnackBarModel = it.link?.let { link ->
+                            SnackBarModel(
+                                message = resourceProvider.getString(
+                                    R.string.single_stock_screen_snackbar_with_link_title,
+                                    link
+                                ),
+                                actionLabel = resourceProvider.getString(
+                                    R.string.single_stock_screen_snackbar_with_link_action_label
+                                ),
+                                link = link
+                            )
+                        }
+                    )
+                },
+                climateChange = ClimateChangeScoreUiModel(
+                    title = resourceProvider.getString(
+                        R.string.single_stock_screen_climate_score_title
+                    ),
+                    score = knowledgeGraph.keyStats.climateChange.score,
+                    link = knowledgeGraph.keyStats.climateChange.link
+                )
+            ),
+            about = knowledgeGraph.about.map {
+                KnowledgeGraphUiModel.AboutUiModel(
+                    title = it.title,
+                    description = DescriptionUiModel(
+                        snippet = it.description.snippet,
+                        link = it.description.link,
+                        linkText = it.description.linkText
+                    ),
+                    info = it.info.map { info ->
+                        InfoUiModel(
+                            label = info.label,
+                            value = info.value,
+                            link = info.link
+                        )
+                    }
+                )
+            }
+        )
     }
 }

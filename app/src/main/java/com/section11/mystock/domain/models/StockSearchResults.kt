@@ -1,5 +1,7 @@
 package com.section11.mystock.domain.models
 
+import com.section11.mystock.domain.models.StockInformation.Summary
+
 data class StockSearchResults(
     val exactMatch: Summary?,
     val closeMatchStocks: List<CloseMatchStock>?

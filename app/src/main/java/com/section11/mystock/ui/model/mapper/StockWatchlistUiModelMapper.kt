@@ -56,8 +56,7 @@ class StockWatchlistUiModelMapper@Inject constructor(
         return if (BuildConfig.DEBUG) {
             resourceProvider.getString(
                 R.string.app_version_info_debug,
-                environment.name,
-                environment.baseUrl
+                environment.name
             )
         } else {
             BuildConfig.VERSION_NAME

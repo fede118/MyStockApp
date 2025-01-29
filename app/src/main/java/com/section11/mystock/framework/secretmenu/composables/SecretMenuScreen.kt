@@ -43,7 +43,6 @@ private const val TITLE = "Secret Menu"
 private const val SELECT_ENVIRONMENT_TEXT = "Select Environment"
 private const val APPLY_BUTTON_TEXT = "Apply Change"
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SecretMenuScreen(
     secretMenuStateFlow: StateFlow<CurrentSelectedEnvironment>,

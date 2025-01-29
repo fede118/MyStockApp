@@ -1,3 +1,4 @@
+
 package com.section11.mystock.ui.common.composables
 
 import androidx.compose.foundation.layout.Box
@@ -35,9 +36,7 @@ fun MyStockLoader(modifier: Modifier = Modifier, paddingVertical: Dp = LocalSpac
 }
 
 @Composable
-fun SecretMenuShakeDetector(
-    onShakeDetected: () -> Unit
-) {
+fun SecretMenuShakeDetector(onShakeDetected: () -> Unit) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
