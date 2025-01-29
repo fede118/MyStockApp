@@ -1,7 +1,7 @@
 package com.section11.mystock.data.repositories
 
-import com.section11.mystock.data.mappers.toStockInformation
-import com.section11.mystock.data.mappers.toStockSearchResults
+import com.section11.mystock.data.mapper.toStockInformation
+import com.section11.mystock.data.mapper.toStockSearchResults
 import com.section11.mystock.data.service.StocksInformationService
 import com.section11.mystock.domain.models.StockInformation
 import com.section11.mystock.domain.models.StockSearchResults

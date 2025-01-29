@@ -2,14 +2,17 @@ package com.section11.mystock.data.mappers
 
 import com.section11.mystock.data.dto.CloseMatchPriceMovementResponse
 import com.section11.mystock.data.dto.CloseMatchStockResponse
-import com.section11.mystock.data.dto.PriceMovementResponse
+import com.section11.mystock.data.dto.StockInformationResponse.SummaryResponse
+import com.section11.mystock.data.dto.StockInformationResponse.SummaryResponse.PriceMovementResponse
 import com.section11.mystock.data.dto.StockSearchResponse
-import com.section11.mystock.data.dto.SummaryResponse
+import com.section11.mystock.data.mapper.toCloseMatchStock
+import com.section11.mystock.data.mapper.toCloseMatchStockPriceMovement
+import com.section11.mystock.data.mapper.toStockSearchResults
 import com.section11.mystock.domain.models.CloseMatchStock
 import com.section11.mystock.domain.models.CloseMatchStockPriceMovement
-import com.section11.mystock.domain.models.PriceMovement
+import com.section11.mystock.domain.models.StockInformation.Summary
+import com.section11.mystock.domain.models.StockInformation.Summary.PriceMovement
 import com.section11.mystock.domain.models.StockSearchResults
-import com.section11.mystock.domain.models.Summary
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

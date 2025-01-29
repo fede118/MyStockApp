@@ -5,9 +5,9 @@ import com.section11.mystock.common.resources.ResourceProvider
 import com.section11.mystock.domain.common.Const.COLON
 import com.section11.mystock.domain.models.CloseMatchStock
 import com.section11.mystock.domain.models.CloseMatchStockPriceMovement
-import com.section11.mystock.domain.models.PriceMovement
+import com.section11.mystock.domain.models.StockInformation.Summary
+import com.section11.mystock.domain.models.StockInformation.Summary.PriceMovement
 import com.section11.mystock.domain.models.StockSearchResults
-import com.section11.mystock.domain.models.Summary
 import com.section11.mystock.ui.common.extentions.toPercentageFormat
 import com.section11.mystock.ui.model.StockSearchResultUiModel
 import com.section11.mystock.ui.theme.Green
@@ -48,7 +48,11 @@ class StockSearchResultUiMapperTest {
             currency = expectedCurrency,
             price = expectedPrice,
             exchange = expectedExchange,
-            priceMovement = PriceMovement(expectedPercentage, expectedPercentageValue, expectedMovement)
+            priceMovement = PriceMovement(
+                expectedPercentage,
+                expectedPercentageValue,
+                expectedMovement
+            )
         )
         val stockSearchResults = StockSearchResults(
             exactMatch = exactMatch,

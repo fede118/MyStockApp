@@ -3,13 +3,18 @@ package com.section11.mystock.ui.common.previewsrepositories
 import android.content.Context
 import com.section11.mystock.domain.models.CloseMatchStock
 import com.section11.mystock.domain.models.CloseMatchStockPriceMovement
-import com.section11.mystock.domain.models.GraphInformation
-import com.section11.mystock.domain.models.GraphNode
-import com.section11.mystock.domain.models.PriceMovement
 import com.section11.mystock.domain.models.Stock
 import com.section11.mystock.domain.models.StockInformation
+import com.section11.mystock.domain.models.StockInformation.GraphInformation
+import com.section11.mystock.domain.models.StockInformation.GraphInformation.GraphNode
+import com.section11.mystock.domain.models.StockInformation.KnowledgeGraph
+import com.section11.mystock.domain.models.StockInformation.KnowledgeGraph.About
+import com.section11.mystock.domain.models.StockInformation.KnowledgeGraph.KeyStats.ClimateChange
+import com.section11.mystock.domain.models.StockInformation.KnowledgeGraph.KeyStats.Stat
+import com.section11.mystock.domain.models.StockInformation.KnowledgeGraph.KeyStats.Tag
+import com.section11.mystock.domain.models.StockInformation.Summary
+import com.section11.mystock.domain.models.StockInformation.Summary.PriceMovement
 import com.section11.mystock.domain.models.StockSearchResults
-import com.section11.mystock.domain.models.Summary
 import com.section11.mystock.framework.environment.EnvironmentManager.Environment.Test
 import com.section11.mystock.framework.resource.ResourceProviderImpl
 import com.section11.mystock.ui.model.StockInformationUiModel
@@ -61,6 +66,46 @@ class FakeRepositoryForPreviews(context: Context) {
                 },
                 edgeLabels = Pair("08:26", "08:50"),
                 horizontalAxisLabels = listOf("08:31", "08:36", "08:40", "08:45")
+            ),
+            knowledgeGraph = KnowledgeGraph(
+                keyStats = KnowledgeGraph.KeyStats(
+                    tags = listOf(
+                        Tag("Climate leader","description"),
+                        Tag("Stock","description"),
+                        Tag("US listed security","description"),
+                        Tag("US headquartered","description")
+                    ),
+                    stats = listOf(
+                        Stat("Day Range","description1","$190.68 - $195.40"),
+                        Stat("Year Range","description1","$130.67 - $202.29"),
+                        Stat("Market Cap","description2","2.40T USD"),
+                        Stat("Avg Volume","description2","28.65M"),
+                        Stat("P/E Ratio","description2","25.84"),
+                        Stat("Dividend Yield","description2","0.41%"),
+                        Stat("Primary Exchange","description2","NASDAQ")
+                    ),
+                    climateChange = ClimateChange(
+                        score = "A",
+                        link = "link"
+                    )
+                ),
+                about = listOf(
+                    About(
+                        title = "title",
+                        description = About.Description(
+                            snippet = "snippet",
+                            link = "link",
+                            linkText = "linkText"
+                        ),
+                        info = listOf(
+                            About.Info(
+                                label = "label",
+                                value = "value",
+                                link = "link"
+                            )
+                        )
+                    )
+                )
             )
         )
 

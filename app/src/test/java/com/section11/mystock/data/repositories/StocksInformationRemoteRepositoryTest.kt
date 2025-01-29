@@ -3,8 +3,8 @@ package com.section11.mystock.data.repositories
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.section11.mystock.data.dto.StockInformationResponse
 import com.section11.mystock.data.dto.StockSearchResponse
-import com.section11.mystock.data.mappers.toStockInformation
-import com.section11.mystock.data.mappers.toStockSearchResults
+import com.section11.mystock.data.mapper.toStockInformation
+import com.section11.mystock.data.mapper.toStockSearchResults
 import com.section11.mystock.data.service.StocksInformationService
 import com.section11.mystock.domain.exceptions.ApiErrorException
 import com.section11.mystock.domain.exceptions.ResponseBodyNullException
@@ -64,7 +64,7 @@ class StocksInformationRemoteRepositoryTest {
     fun `getStockInformation return stock information`() = runTest(testDispatcher) {
         // Given
         val stockInformationResponse: StockInformationResponse = mock()
-        mockkStatic("com.section11.mystock.data.mappers.StockInformationDataMapperKt")
+        mockkStatic("com.section11.mystock.data.mapper.StockInformationDataMapperKt")
         every { stockInformationResponse.toStockInformation() } returns mock()
 
         val response: Response<StockInformationResponse> = mock()
@@ -110,7 +110,7 @@ class StocksInformationRemoteRepositoryTest {
         // Given
         val query = "query"
         val mockResponse: StockSearchResponse = mock()
-        mockkStatic("com.section11.mystock.data.mappers.SearchStockDataMapperKt")
+        mockkStatic("com.section11.mystock.data.mapper.SearchStockDataMapperKt")
         every { mockResponse.toStockSearchResults() } returns mock()
         val response: Response<StockSearchResponse> = mock()
         whenever(response.isSuccessful).thenReturn(true)
