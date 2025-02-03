@@ -2,7 +2,6 @@
 package com.section11.mystock.ui.common.composables
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -30,8 +29,8 @@ fun SmallBodyText(text: String, modifier: Modifier = Modifier) {
 
 @Composable
 fun MyStockLoader(modifier: Modifier = Modifier, paddingVertical: Dp = LocalSpacing.current.medium) {
-    Box(modifier = modifier.fillMaxWidth().padding(vertical = paddingVertical)) {
-        CircularProgressIndicator(modifier = modifier.align(Alignment.Center))
+    Box(modifier = modifier.padding(vertical = paddingVertical)) {
+        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
     }
 }
 

@@ -3,7 +3,6 @@ package com.section11.mystock.ui.model.mapper
 import androidx.compose.ui.graphics.Color
 import com.section11.mystock.R
 import com.section11.mystock.common.resources.ResourceProvider
-import com.section11.mystock.domain.common.Const.COLON
 import com.section11.mystock.domain.models.StockSearchResults
 import com.section11.mystock.ui.common.extentions.toPercentageFormat
 import com.section11.mystock.ui.model.StockSearchResultUiModel
@@ -26,7 +25,8 @@ class StockSearchResultUiMapper @Inject constructor(
                 resultsList.add(
                     StockSearchResultUiModel(
                         title = it.title,
-                        symbolColonExchange = it.stock + COLON + it.exchange,
+                        symbol = it.symbol,
+                        exchange = it.exchange,
                         symbolBoxColor = RedIntense,
                         priceLabel = "${it.currency}${it.price}",
                         priceMovementSymbol = mapPriceMovementSymbol(it.priceMovement.movement),
@@ -40,7 +40,8 @@ class StockSearchResultUiMapper @Inject constructor(
                 resultsList.add(
                     StockSearchResultUiModel(
                         title = it.title,
-                        symbolColonExchange = it.stock,
+                        symbol = it.symbol,
+                        exchange = it.exchange,
                         symbolBoxColor = RedIntense,
                         priceLabel = "${it.currency}${it.extractedPrice}",
                         priceMovementSymbol = mapPriceMovementSymbol(it.priceMovement.movement),

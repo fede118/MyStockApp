@@ -19,7 +19,6 @@ import javax.inject.Singleton
 private const val DEFAULT_TIME_OUT = 15L
 private const val WRITE_TIME_OUT = 45L
 
-
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {

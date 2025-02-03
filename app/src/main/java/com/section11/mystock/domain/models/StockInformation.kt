@@ -7,7 +7,7 @@ data class StockInformation(
 ) {
     data class Summary(
         val title: String,
-        val stock: String,
+        val symbol: String,
         val exchange: String,
         val price: String,
         val currency: String,
@@ -53,7 +53,7 @@ data class StockInformation(
         data class KeyStats(
             val tags: List<Tag>,
             val stats: List<Stat>,
-            val climateChange: ClimateChange
+            val climateChange: ClimateChange?
         ) {
             data class Tag(
                 val text: String,

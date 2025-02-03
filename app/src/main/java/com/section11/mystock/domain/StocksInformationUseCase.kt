@@ -14,8 +14,8 @@ class StocksInformationUseCase @Inject constructor(
     @Named(DEFAULT_EXCHANGE_MARKET) private val defaultExchange: String
 ) {
 
-    suspend fun getStockInformation(symbol: String, exchange: String? = defaultExchange): StockInformation {
-        val symbolColonExchange = "$symbol$COLON$exchange"
+    suspend fun getStockInformation(symbol: String, exchange: String?): StockInformation {
+        val symbolColonExchange = "$symbol$COLON${exchange ?: defaultExchange}"
         return stocksInformationRepository.getStockInformation(symbolColonExchange)
     }
 

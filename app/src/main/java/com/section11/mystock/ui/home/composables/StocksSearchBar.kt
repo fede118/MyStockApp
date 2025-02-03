@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import com.section11.mystock.domain.common.Const.COLON
 import com.section11.mystock.framework.utils.DarkAndLightPreviews
 import com.section11.mystock.ui.common.composables.MyStockLoader
 import com.section11.mystock.ui.common.previewsrepositories.FakeRepositoryForPreviews
@@ -84,7 +85,7 @@ fun StocksSearchBar(
         if (isActive) {
             when(searchUiState) {
                 is UiState.Error -> Text("Error During Search")
-                is UiState.Loading -> MyStockLoader()
+                is UiState.Loading -> MyStockLoader(Modifier.fillMaxWidth())
                 is SearchResults -> {
                     (searchUiState as? SearchResults)?.results?.let {
                         SearchResultsList(it) { tappedResult ->
@@ -119,7 +120,7 @@ fun SearchResultsList(
 @Composable
 fun SearchResultItem(
     result: StockSearchResultUiModel,
-    onClick: (String) -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val spacing = LocalSpacing.current
@@ -128,12 +129,12 @@ fun SearchResultItem(
         modifier = modifier
             .fillMaxWidth()
             .padding(spacing.medium)
-            .clickable { onClick(result.symbolColonExchange) },
+            .clickable { onClick() },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = result.symbolColonExchange,
+                text = result.symbol + COLON + result.exchange,
                 style = MaterialTheme.typography.bodyMedium,
                 color = result.symbolBoxColor
             )

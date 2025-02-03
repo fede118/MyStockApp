@@ -1,5 +1,6 @@
 package com.section11.mystock.ui.model
 
+import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.Color
 import com.section11.mystock.ui.common.model.SnackBarModel
 
@@ -11,12 +12,14 @@ data class StockInformationUiModel(
     data class SummaryUiModel(
         val title: String,
         val stockSymbolLabel: String,
+        val symbol: String,
         val exchangeLabel: String,
+        val exchange: String,
         val priceLabel: String,
         val priceMovementTitle: String,
         val priceMovementValueLabel: String,
         val priceMovementPercentage: String,
-        val priceMovementColor: Color,
+        val priceMovementColor: Color
     )
 
     /**
@@ -47,7 +50,7 @@ data class StockInformationUiModel(
         data class KeyStatsUiModel(
             val tags: List<TagUiModel>,
             val stats: List<StatUiModel>,
-            val climateChange: ClimateChangeScoreUiModel
+            val climateChange: ClimateChangeScoreUiModel?
         ) {
             data class TagUiModel(
                 val text: String,
@@ -66,7 +69,8 @@ data class StockInformationUiModel(
             data class ClimateChangeScoreUiModel(
                 val title: String,
                 val score: String,
-                val link: String
+                val link: String,
+                @DrawableRes val iconId: Int
             )
         }
 

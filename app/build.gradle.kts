@@ -146,7 +146,6 @@ tasks.create("jacocoTestReport", JacocoReport::class.java) {
         "**/secretmenu/**/*.*",
         "**/composables/**", // exclude files in composable folders
         "**/*Composable*.*", // exclude files with "composable" in their name
-        "**/*Composable*.*", // exclude files with "composable" in their name
         "**/ComposableSingletons*.*", // Exclude ComposableSingletons
         "**/*Application*.*", // Exclude Application classes
         "**/*Activity*.*", // Exclude all activities

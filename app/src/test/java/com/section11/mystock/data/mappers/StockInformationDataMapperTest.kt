@@ -30,7 +30,7 @@ class StockInformationDataMapperTest {
     )
     private val summaryResponse = SummaryResponse(
         title = SUMMARY_TITLE,
-        stock = SUMMARY_STOCK,
+        symbol = SUMMARY_STOCK,
         exchange = SUMMARY_EXCHANGE,
         price = SUMMARY_PRICE,
         currency = SUMMARY_CURRENCY,
@@ -81,7 +81,7 @@ class StockInformationDataMapperTest {
         // Then
         with(stockInformation.summary) {
             assertEquals(SUMMARY_TITLE, title)
-            assertEquals(SUMMARY_STOCK, stock)
+            assertEquals(SUMMARY_STOCK, symbol)
             assertEquals(SUMMARY_EXCHANGE, exchange)
             assertEquals(SUMMARY_PRICE, price)
             assertEquals(SUMMARY_CURRENCY, currency)
@@ -116,8 +116,8 @@ class StockInformationDataMapperTest {
                     assertEquals(tag.description, tags[index].description)
                     assertEquals(tag.link, tags[index].link)
                 }
-                assertEquals(knowledgeGraphResponse.keyStats.climateChange.link, climateChange.link)
-                assertEquals(knowledgeGraphResponse.keyStats.climateChange.score, climateChange.score)
+                assertEquals(knowledgeGraphResponse.keyStats.climateChange?.link, climateChange?.link)
+                assertEquals(knowledgeGraphResponse.keyStats.climateChange?.score, climateChange?.score)
             }
             assertEquals(knowledgeGraphResponse.about.size, about.size)
             knowledgeGraphResponse.about.forEachIndexed { index, info ->

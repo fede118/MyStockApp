@@ -23,7 +23,7 @@ class StockSearchResponseMapperTest {
         // Given
         val summaryResponse = SummaryResponse(
             title = "Apple Inc.",
-            stock = "AAPL",
+            symbol = "AAPL",
             price = "150.00",
             currency = "$",
             exchange = "exchange",
@@ -32,7 +32,7 @@ class StockSearchResponseMapperTest {
         val closeMatchStockResponse = listOf(
             CloseMatchStockResponse(
                 title = "Microsoft Corp.",
-                stock = "MSFT",
+                stock = "MSFT:NASDAQ",
                 extractedPrice = "310.00",
                 currency = "$",
                 priceMovement = CloseMatchPriceMovementResponse(-1.2, "Down")
@@ -50,7 +50,7 @@ class StockSearchResponseMapperTest {
         val expected = StockSearchResults(
             exactMatch = Summary(
                 title = "Apple Inc.",
-                stock = "AAPL",
+                symbol = "AAPL",
                 price = "150.00",
                 currency = "$",
                 exchange = "exchange",
@@ -59,7 +59,8 @@ class StockSearchResponseMapperTest {
             closeMatchStocks = listOf(
                 CloseMatchStock(
                     title = "Microsoft Corp.",
-                    stock = "MSFT",
+                    symbol = "MSFT",
+                    exchange = "NASDAQ",
                     extractedPrice = "310.00",
                     currency = "$",
                     priceMovement = CloseMatchStockPriceMovement(-1.2, "Down")
@@ -93,7 +94,7 @@ class StockSearchResponseMapperTest {
         // Given
         val closeMatchStockResponse = CloseMatchStockResponse(
             title = "Microsoft Corp.",
-            stock = "MSFT",
+            stock = "MSFT:NASDAQ",
             extractedPrice = "310.00",
             currency = "$",
             priceMovement = CloseMatchPriceMovementResponse(-1.2, "Down")
@@ -105,7 +106,8 @@ class StockSearchResponseMapperTest {
         // Then
         val expected = CloseMatchStock(
             title = "Microsoft Corp.",
-            stock = "MSFT",
+            symbol = "MSFT",
+            exchange = "NASDAQ",
             extractedPrice = "310.00",
             currency = "$",
             priceMovement = CloseMatchStockPriceMovement(-1.2, "Down")
