@@ -43,7 +43,7 @@ class SearchViewModel @Inject constructor(
 
     fun onResultTapped(result: StockSearchResultUiModel) {
         viewModelScope.launch(dispatcher) {
-            navigationManager.navigate(ToSingleStock(result.symbolColonExchange))
+            navigationManager.navigate(ToSingleStock(result.symbol, result.exchange))
         }
     }
 

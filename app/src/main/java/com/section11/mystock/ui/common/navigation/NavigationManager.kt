@@ -13,7 +13,7 @@ class NavigationManager {
     }
 
     sealed class NavigationEvent {
-        data class ToSingleStock(val symbolColonExchange: String) : NavigationEvent()
+        data class ToSingleStock(val symbol: String, val exchange: String) : NavigationEvent()
         data class GetSingleStockInfo(val symbol: String) : NavigationEvent()
         data object ToSecretMenu: NavigationEvent()
     }

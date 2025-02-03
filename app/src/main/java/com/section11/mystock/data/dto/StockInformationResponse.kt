@@ -13,7 +13,8 @@ data class StockInformationResponse(
     @Keep
     data class SummaryResponse(
         val title: String,
-        val stock: String,
+        @SerializedName("stock")
+        val symbol: String,
         val exchange: String,
         val currency: String,
         @SerializedName("extracted_price")
@@ -46,7 +47,7 @@ data class StockInformationResponse(
             val tags: List<TagResponse>,
             val stats: List<StatResponse>,
             @SerializedName("climate_change")
-            val climateChange: ClimateChangeResponse
+            val climateChange: ClimateChangeResponse?
         ) {
             @Keep
             data class TagResponse(

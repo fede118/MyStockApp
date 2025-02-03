@@ -9,6 +9,7 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -29,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import com.section11.mystock.framework.utils.DarkAndLightPreviews
 import com.section11.mystock.ui.common.composables.ExpandableStockCard
 import com.section11.mystock.ui.common.composables.MyStockLoader
+import com.section11.mystock.ui.common.events.UiEvent
 import com.section11.mystock.ui.common.previewsrepositories.FakeRepositoryForPreviews
 import com.section11.mystock.ui.common.uistate.UiState
 import com.section11.mystock.ui.common.uistate.UiState.Idle
@@ -36,6 +38,7 @@ import com.section11.mystock.ui.common.uistate.UiState.Loading
 import com.section11.mystock.ui.home.events.WatchlistScreenEvent
 import com.section11.mystock.ui.model.WatchlistScreenUiModel
 import com.section11.mystock.ui.model.WatchlistStockModel
+import com.section11.mystock.ui.singlestock.SingleStockViewModel.ActionableIconState
 import com.section11.mystock.ui.singlestock.SingleStockViewModel.SingleStockUiState.SingleStockFetched
 import com.section11.mystock.ui.singlestock.composables.SingleStockCardContent
 import com.section11.mystock.ui.theme.LocalSpacing
@@ -50,8 +53,9 @@ private const val ANIM_DURATION = 300
 fun WatchlistScreen(
     modifier: Modifier = Modifier,
     stocksScreenUiModel: WatchlistScreenUiModel,
-    onEvent: (WatchlistScreenEvent) -> Unit,
+    onEvent: (UiEvent) -> Unit,
     singleStockInfoState: StateFlow<UiState>,
+    singleStockActionableItemStateFlow: StateFlow<ActionableIconState>,
     searchUiStateFlow: StateFlow<UiState>
 ) {
     val spacing = LocalSpacing.current
@@ -60,14 +64,18 @@ fun WatchlistScreen(
         StocksSearchBar(
             hint = stocksScreenUiModel.searchHint,
             onEvent = onEvent,
-            modifier = modifier.align(CenterHorizontally),
-            searchUiStateFlow = searchUiStateFlow
+            searchUiStateFlow = searchUiStateFlow,
+            modifier = modifier
+                .align(CenterHorizontally)
+                .fillMaxWidth()
+                .padding(horizontal = spacing.medium)
         )
         StockList(
             modifier = modifier.padding(horizontal = spacing.medium),
             stocksScreenUiModel = stocksScreenUiModel,
             onEvent = onEvent,
-            singleStockInfo = singleStockInfoState
+            singleStockInfo = singleStockInfoState,
+            singleStockActionableItemStateFlow = singleStockActionableItemStateFlow
         )
     }
 }
@@ -76,8 +84,9 @@ fun WatchlistScreen(
 fun StockList(
     modifier: Modifier = Modifier,
     stocksScreenUiModel: WatchlistScreenUiModel,
-    onEvent: (WatchlistScreenEvent) -> Unit,
-    singleStockInfo: StateFlow<UiState>
+    onEvent: (UiEvent) -> Unit,
+    singleStockInfo: StateFlow<UiState>,
+    singleStockActionableItemStateFlow: StateFlow<ActionableIconState>
 ) {
     var expandedCardIndex by remember { mutableIntStateOf(NO_STOCK_SELECTED) }
 
@@ -88,13 +97,15 @@ fun StockList(
             StockRowItem(
                 modifier.padding(vertical = spacing.small),
                 stock = stocksScreenUiModel.stocks[index],
-                onStockTap = { stockWatchlist ->
-                    expandedCardIndex = if (expandedCardIndex == index) NO_STOCK_SELECTED else index
-                    onEvent(WatchlistScreenEvent.StockTapped(stockWatchlist))
-                },
                 singleStockInfoState = singleStockInfo,
+                singleStockActionableItemStateFlow = singleStockActionableItemStateFlow,
                 isExpanded = index == expandedCardIndex
-            )
+            ) { event ->
+                if (event is WatchlistScreenEvent.StockTapped) {
+                    expandedCardIndex = if (expandedCardIndex == index) NO_STOCK_SELECTED else index
+                }
+                onEvent(event)
+            }
         }
     }
 }
@@ -103,15 +114,21 @@ fun StockList(
 fun StockRowItem(
     modifier: Modifier = Modifier,
     stock: WatchlistStockModel,
-    onStockTap: (WatchlistStockModel) -> Unit,
     singleStockInfoState: StateFlow<UiState>,
-    isExpanded: Boolean
+    singleStockActionableItemStateFlow: StateFlow<ActionableIconState>,
+    isExpanded: Boolean,
+    onEvent: (UiEvent) -> Unit
 ) {
     ExpandableStockCard(
         modifier = modifier,
         isExpanded = isExpanded,
-        onExpandedContentNeeded = { onStockTap(stock) },
-        expandedContent = { SingleStockInfoExpandedContent(singleStockInfoState) }
+        onExpandedContentNeeded = { onEvent(WatchlistScreenEvent.StockTapped(stock)) },
+        expandedContent = {
+            SingleStockInfoExpandedContent(
+                singleStockInfoState,
+                singleStockActionableItemStateFlow
+            ) { event -> onEvent(event) }
+        }
     ) {
         AnimatedVisibility(
             visible = !isExpanded,
@@ -145,15 +162,20 @@ fun StockRowItem(
 }
 
 @Composable
-fun SingleStockInfoExpandedContent(singleStockUiState: StateFlow<UiState>) {
+fun SingleStockInfoExpandedContent(
+    singleStockUiState: StateFlow<UiState>,
+    actionableIconStateFlow: StateFlow<ActionableIconState>,
+    onEvent: (UiEvent) -> Unit
+) {
     val singleStockInfo by singleStockUiState.collectAsState()
     when (singleStockInfo) {
         is UiState.Error -> Text("Error: ${(singleStockInfo as UiState.Error).message}")
         is SingleStockFetched -> SingleStockCardContent(
-            stockInformationUiModel = (singleStockInfo as SingleStockFetched).stockInformationUiModel
-        )
+            stockInformationUiModel = (singleStockInfo as SingleStockFetched).stockInformationUiModel,
+            actionableIconStateFlow = actionableIconStateFlow
+        ) { event -> onEvent(event) }
         is Idle -> @Composable {}
-        is Loading -> MyStockLoader()
+        is Loading -> MyStockLoader(Modifier.fillMaxWidth())
     }
 }
 
@@ -167,6 +189,24 @@ fun HomeScreenStockListPreview() {
                 stocksScreenUiModel = fakeRepo.getStockWatchlist(),
                 onEvent = {},
                 singleStockInfoState = fakeRepo.getSingleStockInfoStateSuccess(),
+                singleStockActionableItemStateFlow = fakeRepo.getActionableIconStateFlow(),
+                searchUiStateFlow = MutableStateFlow(Idle)
+            )
+        }
+    }
+}
+
+@DarkAndLightPreviews
+@Composable
+fun HomeScreenEmptyPreview() {
+    val fakeRepo = FakeRepositoryForPreviews(LocalContext.current)
+    MyStockTheme {
+        Surface {
+            WatchlistScreen(
+                stocksScreenUiModel = fakeRepo.getEmptyList(),
+                onEvent = {},
+                singleStockInfoState = fakeRepo.getSingleStockInfoStateSuccess(),
+                singleStockActionableItemStateFlow = fakeRepo.getActionableIconStateFlow(),
                 searchUiStateFlow = MutableStateFlow(Idle)
             )
         }

@@ -68,7 +68,8 @@ class SearchViewModelTest {
             assertEquals(expectedResult.size, results.size)
             for(i in expectedResult.indices) {
                 assertEquals(expectedResult[i].title, results[i].title)
-                assertEquals(expectedResult[i].symbolColonExchange, results[i].symbolColonExchange)
+                assertEquals(expectedResult[i].symbol, results[i].symbol)
+                assertEquals(expectedResult[i].exchange, results[i].exchange)
                 assertEquals(expectedResult[i].symbolBoxColor, results[i].symbolBoxColor)
                 assertEquals(expectedResult[i].priceMovementColor, results[i].priceMovementColor)
                 assertEquals(expectedResult[i].percentage, results[i].percentage)
@@ -94,7 +95,7 @@ class SearchViewModelTest {
         searchViewModel.onResultTapped(stock)
         advanceUntilIdle()
 
-        verify(navigationManager).navigate(ToSingleStock(stock.symbolColonExchange))
+        verify(navigationManager).navigate(ToSingleStock(stock.symbol, stock.exchange))
     }
 
     private fun getSearchResultMockList(
@@ -103,7 +104,8 @@ class SearchViewModelTest {
         return List(size) {
             StockSearchResultUiModel(
                 title = "title",
-                symbolColonExchange = "symbol:exchange",
+                symbol = "symbol",
+                exchange = "exchange",
                 symbolBoxColor = Color.Black,
                 priceLabel = "priceLabel",
                 priceMovementSymbol = "priceMovementSymbol",

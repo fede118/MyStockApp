@@ -10,9 +10,15 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface StockDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(stock: StockEntity)
 
     @Query("SELECT * FROM stocks_watchlist")
     fun getStocksWatchlist(): Flow<List<StockEntity>>
+
+    @Query("SELECT * FROM stocks_watchlist WHERE symbol = :symbol")
+    fun getStockBySymbol(symbol: String): StockEntity?
+
+    @Query("DELETE FROM stocks_watchlist WHERE symbol = :symbol")
+    suspend fun remove(symbol: String)
 }

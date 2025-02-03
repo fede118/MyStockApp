@@ -8,7 +8,8 @@ data class StockSearchResults(
 )
 
 data class CloseMatchStock(
-    val stock: String,
+    val symbol: String,
+    val exchange: String,
     val title: String,
     val extractedPrice: String,
     val currency: String,

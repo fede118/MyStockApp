@@ -24,6 +24,7 @@ import com.section11.mystock.ui.model.mapper.StockInformationUiModelMapper
 import com.section11.mystock.ui.model.mapper.StockSearchResultUiMapper
 import com.section11.mystock.ui.model.mapper.StockWatchlistUiModelMapper
 import com.section11.mystock.ui.singlestock.SingleStockViewModel
+import com.section11.mystock.ui.singlestock.SingleStockViewModel.ActionableIconState
 import com.section11.mystock.ui.singlestock.SingleStockViewModel.SingleStockUiState.SingleStockFetched
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -46,6 +47,10 @@ class FakeRepositoryForPreviews(context: Context) {
             Stock("Microsoft $index", "MSFT", "NASDAQ")
         }
         return stockWatchlistUiModelMapper.mapToUiModel(stocks)
+    }
+
+    fun getEmptyList(): WatchlistScreenUiModel {
+        return stockWatchlistUiModelMapper.mapToUiModel(emptyList())
     }
 
     fun getSingleStockInfoStateSuccess(): StateFlow<SingleStockViewModel.SingleStockUiState> {
@@ -115,7 +120,7 @@ class FakeRepositoryForPreviews(context: Context) {
     private fun getSummary(): Summary {
         return Summary(
             title = "Apple Inc.",
-            stock = "AAPL",
+            symbol = "AAPL",
             exchange = "NASDAQ",
             price = "426.32",
             currency = "$",
@@ -136,21 +141,29 @@ class FakeRepositoryForPreviews(context: Context) {
     }
 
     fun getSearchResultWithNoExactMatch(): List<StockSearchResultUiModel> {
-        return stockSearchUiModelMapper.mapToUiModel(StockSearchResults(
-            exactMatch = null,
-            closeMatchStocks = List(DEFAULT_SEARCH_BAR_RESULTS) { index ->
-                CloseMatchStock(
-                    title = "Apple Inc.",
-                    stock = "AAPL$index",
-                    extractedPrice = "426.32",
-                    currency = "$",
-                    priceMovement = CloseMatchStockPriceMovement(
-                        percentage = 2.561525,
-                        movement = "Up"
+        return stockSearchUiModelMapper.mapToUiModel(
+            StockSearchResults(
+                exactMatch = null,
+                closeMatchStocks = List(DEFAULT_SEARCH_BAR_RESULTS) {
+                    CloseMatchStock(
+                        title = "Apple Inc.",
+                        symbol = "AAPL",
+                        exchange = "NASDAQ",
+                        extractedPrice = "426.32",
+                        currency = "$",
+                        priceMovement = CloseMatchStockPriceMovement(
+                            percentage = 2.561525,
+                            movement = "Up"
+                        )
                     )
-                )
-            }
+                }
+            )
         )
+    }
+
+    fun getActionableIconStateFlow(): StateFlow<ActionableIconState> {
+        return MutableStateFlow(
+            singleStockUiMapper.getActionableIconUiModel(getSummary(), true)
         )
     }
 }

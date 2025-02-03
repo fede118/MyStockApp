@@ -1,5 +1,8 @@
 package com.section11.mystock.ui.model.mapper
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.CheckCircle
 import com.section11.mystock.R
 import com.section11.mystock.common.resources.ResourceProvider
 import com.section11.mystock.domain.models.StockInformation
@@ -12,6 +15,8 @@ import com.section11.mystock.domain.models.StockInformation.KnowledgeGraph.KeySt
 import com.section11.mystock.domain.models.StockInformation.KnowledgeGraph.KeyStats.Tag
 import com.section11.mystock.domain.models.StockInformation.Summary
 import com.section11.mystock.domain.models.StockInformation.Summary.PriceMovement
+import com.section11.mystock.ui.singlestock.SingleStockViewModel.ActionableIconState.AddToWatchlist
+import com.section11.mystock.ui.singlestock.SingleStockViewModel.ActionableIconState.AlreadyAddedToWatchlist
 import com.section11.mystock.ui.theme.Green
 import com.section11.mystock.ui.theme.Red
 import org.junit.Assert.assertEquals
@@ -20,6 +25,7 @@ import org.junit.Test
 import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
 private const val DEFAULT_DIGITS = 2
@@ -49,7 +55,7 @@ class StockInformationUiModelMapperTest {
     )
     private val summary = Summary(
         title = STOCK_TITLE,
-        stock = STOCK_SYMBOL,
+        symbol = STOCK_SYMBOL,
         exchange = STOCK_EXCHANGE,
         price = STOCK_PRICE,
         currency = STOCK_CURRENCY,
@@ -120,8 +126,8 @@ class StockInformationUiModelMapperTest {
                 }
             }
             keyStats.climateChange.let {
-                assertEquals(it.score, keyStats.climateChange.score)
-                assertEquals(it.link, keyStats.climateChange.link)
+                assertEquals(it?.score, keyStats.climateChange?.score)
+                assertEquals(it?.link, keyStats.climateChange?.link)
             }
         }
     }
@@ -136,7 +142,7 @@ class StockInformationUiModelMapperTest {
         )
         val summary = Summary(
             title = STOCK_TITLE,
-            stock = STOCK_SYMBOL,
+            symbol = STOCK_SYMBOL,
             exchange = STOCK_EXCHANGE,
             price = STOCK_PRICE,
             currency = STOCK_CURRENCY,
@@ -169,7 +175,7 @@ class StockInformationUiModelMapperTest {
         )
         val summary = Summary(
             title = STOCK_TITLE,
-            stock = STOCK_SYMBOL,
+            symbol = STOCK_SYMBOL,
             exchange = STOCK_EXCHANGE,
             price = STOCK_PRICE,
             currency = STOCK_CURRENCY,
@@ -190,6 +196,40 @@ class StockInformationUiModelMapperTest {
             assertEquals("- $PRICE_MOVEMENT_PERCENTAGE_DOWN%", priceMovementPercentage)
             assertEquals(Red, priceMovementColor)
         }
+    }
+
+    @Test
+    fun `when mapping actionable icon ui model if its already added then should return AlreadyAddedToWatchlist`() {
+        whenever(resourceProvider.getString(any())).thenReturn("someString")
+
+        val result = mapper.getActionableIconUiModel(summary, true)
+
+        assert(result is AlreadyAddedToWatchlist)
+        with((result as AlreadyAddedToWatchlist).iconUiModel) {
+            assertEquals(STOCK_TITLE, title)
+            assertEquals(STOCK_SYMBOL, symbol)
+            assertEquals(STOCK_EXCHANGE, exchange)
+            assertEquals(Icons.Default.CheckCircle, iconVector)
+        }
+        verify(resourceProvider)
+            .getString(R.string.single_stock_screen_actionable_icon_remove_content_description)
+    }
+
+    @Test
+    fun `when mapping actionable icon ui model if its not in watchlist then should return AddToWatchlist`() {
+        whenever(resourceProvider.getString(any())).thenReturn("someString")
+
+        val result = mapper.getActionableIconUiModel(summary, false)
+
+        assert(result is AddToWatchlist)
+        with((result as AddToWatchlist).iconUiModel) {
+            assertEquals(STOCK_TITLE, title)
+            assertEquals(STOCK_SYMBOL, symbol)
+            assertEquals(STOCK_EXCHANGE, exchange)
+            assertEquals(Icons.Default.AddCircle, iconVector)
+        }
+        verify(resourceProvider)
+            .getString(R.string.single_stock_screen_actionable_icon_add_content_description)
     }
 
     private fun initResourceManagerStrings() {

@@ -1,5 +1,10 @@
 package com.section11.mystock.ui.singlestock.composables
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +26,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,17 +37,23 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.dp
-import com.section11.mystock.R
 import com.section11.mystock.framework.utils.DarkAndLightPreviews
+import com.section11.mystock.ui.common.composables.MyStockLoader
 import com.section11.mystock.ui.common.composables.SmallBodyText
 import com.section11.mystock.ui.common.composables.StockCard
+import com.section11.mystock.ui.common.events.UiEvent
 import com.section11.mystock.ui.common.extentions.showSnackBar
 import com.section11.mystock.ui.common.previewsrepositories.FakeRepositoryForPreviews
 import com.section11.mystock.ui.model.StockInformationUiModel
 import com.section11.mystock.ui.model.StockInformationUiModel.KnowledgeGraphUiModel
 import com.section11.mystock.ui.model.StockInformationUiModel.KnowledgeGraphUiModel.KeyStatsUiModel.ClimateChangeScoreUiModel
 import com.section11.mystock.ui.model.StockInformationUiModel.KnowledgeGraphUiModel.KeyStatsUiModel.TagUiModel
+import com.section11.mystock.ui.singlestock.SingleStockViewModel.ActionableIconState
+import com.section11.mystock.ui.singlestock.SingleStockViewModel.ActionableIconState.AddToWatchlist
+import com.section11.mystock.ui.singlestock.SingleStockViewModel.ActionableIconState.AlreadyAddedToWatchlist
+import com.section11.mystock.ui.singlestock.SingleStockViewModel.ActionableIconState.LoadingIcon
+import com.section11.mystock.ui.singlestock.events.SingleStockScreenEvent.AddToWatchlistTap
+import com.section11.mystock.ui.singlestock.events.SingleStockScreenEvent.RemoveFromWatchlistTap
 import com.section11.mystock.ui.singlestock.graph.composables.LineGraph
 import com.section11.mystock.ui.theme.Dimens
 import com.section11.mystock.ui.theme.Green
@@ -48,12 +61,18 @@ import com.section11.mystock.ui.theme.LocalDimens
 import com.section11.mystock.ui.theme.LocalSnackbarHostState
 import com.section11.mystock.ui.theme.LocalSpacing
 import com.section11.mystock.ui.theme.MyStockTheme
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+
+private const val ICON_ANIMATION_LABEL = "Icon Animation"
+private const val ANIM_DURATION = 500
 
 @Composable
 fun SingleStockScreen(
     stockInformationUiModel: StockInformationUiModel,
-    graphAnimationEnabled: Boolean = true
+    actionableIconStateFlow: StateFlow<ActionableIconState>,
+    graphAnimationEnabled: Boolean = true,
+    onEvent: (UiEvent) -> Unit = {}
 ) {
     val spacing = LocalSpacing.current
 
@@ -64,8 +83,9 @@ fun SingleStockScreen(
     ) {
         SingleStockCardContent(
             stockInformationUiModel = stockInformationUiModel,
+            actionableIconStateFlow = actionableIconStateFlow,
             graphAnimationEnabled = graphAnimationEnabled
-        )
+        ) { event -> onEvent(event) }
     }
 }
 
@@ -73,10 +93,12 @@ fun SingleStockScreen(
 fun SingleStockCardContent(
     modifier: Modifier = Modifier,
     stockInformationUiModel: StockInformationUiModel,
-    graphAnimationEnabled: Boolean = true
+    actionableIconStateFlow: StateFlow<ActionableIconState>,
+    graphAnimationEnabled: Boolean = true,
+    onEvent: (UiEvent) -> Unit
 ) {
     with(stockInformationUiModel.summaryUiModel) {
-        HeaderSection(title, stockSymbolLabel, exchangeLabel)
+        HeaderSection(stockInformationUiModel, actionableIconStateFlow) { event -> onEvent(event) }
         Text(
             text = priceLabel,
             style = MaterialTheme.typography.titleMedium,
@@ -96,19 +118,78 @@ fun SingleStockCardContent(
 }
 
 @Composable
-fun HeaderSection(title: String, stockSymbolLabel: String, exchangeLabel: String) {
-    Text(
-        text = title,
-        style = MaterialTheme.typography.titleLarge,
-        color = MaterialTheme.colorScheme.primary
-    )
+fun HeaderSection(
+    stockInformationUiModel: StockInformationUiModel,
+    actionableIconStateFlow: StateFlow<ActionableIconState>,
+    onEvent: (UiEvent) -> Unit
+) {
+    val dimens = LocalDimens.current
 
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        SmallBodyText(text = stockSymbolLabel)
-        SmallBodyText(text = exchangeLabel)
+    with(stockInformationUiModel.summaryUiModel) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.primary
+            )
+
+            ActionableIcon(
+                modifier = Modifier.align(Alignment.CenterVertically),
+                actionableIconStateFlow = actionableIconStateFlow,
+                dimens = dimens
+            ) { event -> onEvent(event) }
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            SmallBodyText(text = stockSymbolLabel)
+            SmallBodyText(text = exchangeLabel)
+        }
+    }
+}
+
+@Composable
+fun ActionableIcon(
+    modifier: Modifier = Modifier,
+    actionableIconStateFlow: StateFlow<ActionableIconState>,
+    dimens: Dimens,
+    onEvent: (UiEvent) -> Unit
+) {
+    val iconState by actionableIconStateFlow.collectAsState()
+
+    AnimatedContent(
+        targetState = iconState,
+        transitionSpec = {
+            fadeIn(animationSpec = tween(ANIM_DURATION)) togetherWith fadeOut(animationSpec = tween(ANIM_DURATION))
+        },
+        label = ICON_ANIMATION_LABEL
+    ) { state ->
+        when (state) {
+            is AddToWatchlist -> with(state.iconUiModel) {
+                Icon(
+                    imageVector = iconVector,
+                    contentDescription = contentDescription,
+                    modifier = modifier
+                        .size(dimens.m3)
+                        .clickable { onEvent(AddToWatchlistTap(this)) }
+                )
+            }
+            is AlreadyAddedToWatchlist -> with(state.iconUiModel) {
+                Icon(
+                    imageVector = iconVector,
+                    contentDescription = contentDescription,
+                    modifier = modifier
+                        .size(dimens.m3)
+                        .clickable { onEvent(RemoveFromWatchlistTap(this)) }
+                )
+            }
+            is LoadingIcon -> MyStockLoader(modifier.size(dimens.m3))
+        }
     }
 }
 
@@ -159,7 +240,7 @@ fun StockExtraInfoSection(
 
         TagsSection(knowledgeGraphUiModel.keyStats.tags, dimens.m1, modifier)
 
-        Spacer(modifier = Modifier.height(dimens.m1AndHalf))
+        Spacer(modifier = Modifier.height(dimens.m1Half))
 
         // Stock Stats
         Column(verticalArrangement = Arrangement.spacedBy(dimens.m1)) {
@@ -168,9 +249,11 @@ fun StockExtraInfoSection(
             }
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(dimens.m1Half))
 
-        ClimateChangeScoreSection(knowledgeGraphUiModel.keyStats.climateChange)
+        knowledgeGraphUiModel.keyStats.climateChange?.let {
+            ClimateChangeScoreSection(it)
+        }
     }
 }
 
@@ -213,7 +296,7 @@ fun TagChip(
                     }
                 }
             }
-            .padding(horizontal = dimens.m1AndHalf, vertical = dimens.mHalf)
+            .padding(horizontal = dimens.m1Half, vertical = dimens.mHalf)
     ) {
         Text(text = tagUiModel.text, fontSize = dimens.textVerySmall, color = Color.Black)
     }
@@ -246,11 +329,12 @@ fun ClimateChangeScoreSection(
             .padding(dimens.m1),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        // Replace with actual leaf icon
         Icon(
-            painter = painterResource(id = R.drawable.ic_launcher_foreground), // Replace with actual leaf icon
+            painter = painterResource(id = climateChangeScore.iconId),
             contentDescription = climateChangeScore.title,
             tint = Green,
-            modifier = Modifier.size(dimens.m2AndHalf)
+            modifier = Modifier.size(dimens.m2Half)
         )
         Spacer(modifier = Modifier.width(dimens.m1))
         Text(
@@ -274,7 +358,11 @@ fun StockScreenDarkThemePreview() {
 
     MyStockTheme {
         Surface {
-            SingleStockScreen(fakeRepo.getSingleStockInformationUiModel(), false)
+            SingleStockScreen(
+                fakeRepo.getSingleStockInformationUiModel(),
+                fakeRepo.getActionableIconStateFlow(),
+                false
+            )
         }
     }
 }

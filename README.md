@@ -11,7 +11,9 @@ This application is built using modern Android development practices and leverag
 
 ## How it Looks (WIP - making changes everyday now)
 
-https://github.com/user-attachments/assets/2cd2c3cb-84db-4e3d-a1f9-d15368438bc2
+Search | Watchlist | SingleStockView
+-------|---------|---------
+![image](https://github.com/user-attachments/assets/87702fbd-da22-490a-9f03-b91e3e1ea36c)|![image](https://github.com/user-attachments/assets/50fa0263-a8b8-495c-885e-c7e60005be78)|![image](https://github.com/user-attachments/assets/3f774b0b-1e11-4fb9-a688-9b0b3ec7bf6d)
 
 ## Key Features
 
@@ -55,7 +57,6 @@ The application follows a clean architecture, separating concerns into distinct 
 
 ## Future Enhancements
 
-*   **Stock Search and Add to Watchlist:** WIP: Implement a search functionality (through and api) to allow users to find stocks and add them to their watchlist.
 *   **Watchlist screen should get % from service** Right now its mocked data I would like it to be from a service, but I don't want to make N calls to get percentages. I need to check if it can be fetched on bulk.
 *   **Error Handling:** Implement robust error handling for network requests, data parsing, and other potential issues, providing informative feedback to the user.
 *   **UI Compose Testing:** Address the current issues with running Compose tests to ensure the UI is thoroughly tested.
@@ -69,9 +70,9 @@ If you have any questions or suggestions, feel free to reach out!
 ## Current backlog
 This section has things that I want to work on, improve or that I know are not the best but are not a priority
 
-* ** Make the watchlist UI match the single stock UI. I want each stock to be a smaller version of the single stock UI, maybe make it larger on tap (hiding all the other stuff)
 * ** In the single stock screen get the labels for the Y axis. This is tricky since I added a padding so that the min and max values are not at the edge of the graph, but this means that getting the data sorted from max to min and then getting the normalized Y index wont work
 * ** Find a better way to mock information for previews (also to stop detekt triggering false positives) 
 * ** Fix @DarkAndLightAnnotation detekt issue where the name doesn't match the file name and suppress is not working
+* ** Show a snackbar when removing a stock from watchlist to have the user confirm the deletion
 
 ---

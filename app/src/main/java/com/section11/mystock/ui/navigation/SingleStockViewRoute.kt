@@ -16,6 +16,11 @@ fun SingleStockViewRoute(stockSymbol: String?, singleStockViewModel: SingleStock
     }
 
     (uiState as? SingleStockFetched)?.let { successState ->
-        SingleStockScreen(successState.stockInformationUiModel)
+        SingleStockScreen(
+            successState.stockInformationUiModel,
+            singleStockViewModel.actionableIconState
+        ) { event ->
+            singleStockViewModel.onSingleStockScreenEvent(event)
+        }
     }
 }

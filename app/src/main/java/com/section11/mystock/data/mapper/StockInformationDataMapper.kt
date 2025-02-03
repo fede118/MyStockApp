@@ -42,7 +42,7 @@ fun StockInformationResponse.toStockInformation(): StockInformation {
 fun SummaryResponse.toSummary(): Summary {
     return Summary(
         title = title,
-        stock = stock,
+        symbol = symbol,
         exchange = exchange,
         price = price,
         currency = currency,
@@ -119,7 +119,7 @@ private fun KeyStatsResponse.toKeyStats(): KeyStats {
     return KeyStats(
         tags = tags.toTags(),
         stats = stats.toStats(),
-        climateChange = climateChange.toClimateChange()
+        climateChange = climateChange?.toClimateChange()
     )
 }
 

@@ -2,7 +2,6 @@ package com.section11.mystock.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.section11.mystock.domain.common.Const.COLON
 import com.section11.mystock.domain.watchlist.StockWatchlistUseCase
 import com.section11.mystock.framework.featureflags.FeatureFlagManager
 import com.section11.mystock.ui.common.navigation.NavigationManager
@@ -52,7 +51,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch(dispatcher) {
             if (featureFlagManager.isNavigationToSingleStockEnabled()) {
                 navigationManager.navigate(
-                    ToSingleStock(stockModel.symbol + COLON + stockModel.exchange)
+                    ToSingleStock(stockModel.symbol, stockModel.exchange)
                 )
             } else {
                 navigationManager.navigate(GetSingleStockInfo(stockModel.symbol))

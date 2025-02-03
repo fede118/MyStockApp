@@ -1,6 +1,5 @@
 package com.section11.mystock.ui.home
 
-import com.section11.mystock.domain.common.Const.COLON
 import com.section11.mystock.domain.models.Stock
 import com.section11.mystock.domain.models.StockInformation
 import com.section11.mystock.domain.watchlist.StockWatchlistUseCase
@@ -102,7 +101,7 @@ class HomeViewModelTest {
         // Then
         val stock = expectedStocks[0]
         verify(mockNavigationManager).navigate(
-            ToSingleStock(stock.symbol + COLON + stock.exchange)
+            ToSingleStock(stock.symbol, stock.exchange)
         )
     }
 
@@ -118,7 +117,7 @@ class HomeViewModelTest {
 
         // Then
         verify(mockNavigationManager).navigate(
-            ToSingleStock(stock.symbol + COLON + stock.exchange)
+            ToSingleStock(stock.symbol, stock.exchange)
         )
     }
 

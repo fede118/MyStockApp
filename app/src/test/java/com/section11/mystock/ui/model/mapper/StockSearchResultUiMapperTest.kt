@@ -2,7 +2,6 @@ package com.section11.mystock.ui.model.mapper
 
 import com.section11.mystock.R
 import com.section11.mystock.common.resources.ResourceProvider
-import com.section11.mystock.domain.common.Const.COLON
 import com.section11.mystock.domain.models.CloseMatchStock
 import com.section11.mystock.domain.models.CloseMatchStockPriceMovement
 import com.section11.mystock.domain.models.StockInformation.Summary
@@ -44,7 +43,7 @@ class StockSearchResultUiMapperTest {
 
         val exactMatch = Summary(
             title = expectedTitle,
-            stock = expectedSymbol,
+            symbol = expectedSymbol,
             currency = expectedCurrency,
             price = expectedPrice,
             exchange = expectedExchange,
@@ -71,7 +70,8 @@ class StockSearchResultUiMapperTest {
         val expected = listOf(
             StockSearchResultUiModel(
                 title = expectedTitle,
-                symbolColonExchange = expectedSymbol + COLON + expectedExchange,
+                symbol = expectedSymbol,
+                exchange = expectedExchange,
                 symbolBoxColor = RedIntense,
                 priceLabel = expectedCurrency + expectedPrice,
                 priceMovementSymbol = "↑",
@@ -88,7 +88,8 @@ class StockSearchResultUiMapperTest {
         val closeMatchStocks = listOf(
             CloseMatchStock(
                 title = "Microsoft Corp.",
-                stock = "MSFT:NASDAQ",
+                symbol = "MSFT",
+                exchange = "NASDAQ",
                 currency = "$",
                 extractedPrice = "310.00",
                 priceMovement = CloseMatchStockPriceMovement(-1.2, "Down")
@@ -109,7 +110,8 @@ class StockSearchResultUiMapperTest {
         val expected = listOf(
             StockSearchResultUiModel(
                 title = "Microsoft Corp.",
-                symbolColonExchange = "MSFT:NASDAQ",
+                symbol = "MSFT",
+                exchange = "NASDAQ",
                 symbolBoxColor = RedIntense,
                 priceLabel = "$310.00",
                 priceMovementSymbol = "↓",

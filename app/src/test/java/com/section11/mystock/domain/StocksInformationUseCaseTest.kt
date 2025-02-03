@@ -28,7 +28,7 @@ class StocksInformationUseCaseTest {
     @Test
     fun `getStockInformation calls repository with default exchange if non is provided`() = runTest {
         val symbol = "symbol"
-        stocksInformationUseCase.getStockInformation(symbol)
+        stocksInformationUseCase.getStockInformation(symbol , null)
 
         verify(stocksInformationRepository)
             .getStockInformation(symbol + COLON + defaultExchange)
