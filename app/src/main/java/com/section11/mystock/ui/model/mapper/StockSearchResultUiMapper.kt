@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.Color
 import com.section11.mystock.R
 import com.section11.mystock.common.resources.ResourceProvider
 import com.section11.mystock.domain.models.StockSearchResults
-import com.section11.mystock.ui.common.extentions.toPercentageFormat
+import com.section11.mystock.ui.common.extensions.toPercentageFormat
 import com.section11.mystock.ui.model.StockSearchResultUiModel
 import com.section11.mystock.ui.theme.Green
 import com.section11.mystock.ui.theme.Red

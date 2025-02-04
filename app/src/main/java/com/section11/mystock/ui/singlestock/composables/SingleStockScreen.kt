@@ -42,7 +42,7 @@ import com.section11.mystock.ui.common.composables.MyStockLoader
 import com.section11.mystock.ui.common.composables.SmallBodyText
 import com.section11.mystock.ui.common.composables.StockCard
 import com.section11.mystock.ui.common.events.UiEvent
-import com.section11.mystock.ui.common.extentions.showSnackBar
+import com.section11.mystock.ui.common.extensions.showSnackBar
 import com.section11.mystock.ui.common.previewsrepositories.FakeRepositoryForPreviews
 import com.section11.mystock.ui.model.StockInformationUiModel
 import com.section11.mystock.ui.model.StockInformationUiModel.KnowledgeGraphUiModel

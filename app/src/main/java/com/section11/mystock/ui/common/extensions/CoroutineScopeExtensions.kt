@@ -1,4 +1,4 @@
-package com.section11.mystock.ui.common.extentions
+package com.section11.mystock.ui.common.extensions
 
 import android.content.Context
 import android.content.Intent
