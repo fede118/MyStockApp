@@ -11,7 +11,7 @@ import com.section11.mystock.domain.models.StockInformation.GraphInformation
 import com.section11.mystock.domain.models.StockInformation.KnowledgeGraph
 import com.section11.mystock.domain.models.StockInformation.KnowledgeGraph.KeyStats.ClimateChange
 import com.section11.mystock.domain.models.StockInformation.Summary
-import com.section11.mystock.ui.common.extentions.toPercentageFormat
+import com.section11.mystock.ui.common.extensions.toPercentageFormat
 import com.section11.mystock.ui.common.model.SnackBarModel
 import com.section11.mystock.ui.model.ActionableIconUiModel
 import com.section11.mystock.ui.model.StockInformationUiModel

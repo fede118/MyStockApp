@@ -5,7 +5,7 @@ import com.section11.mystock.R
 import com.section11.mystock.common.resources.ResourceProvider
 import com.section11.mystock.domain.models.Stock
 import com.section11.mystock.framework.environment.EnvironmentManager
-import com.section11.mystock.ui.common.extentions.toPercentageFormat
+import com.section11.mystock.ui.common.extensions.toPercentageFormat
 import com.section11.mystock.ui.model.WatchlistScreenUiModel
 import com.section11.mystock.ui.model.WatchlistStockModel
 import com.section11.mystock.ui.theme.Green

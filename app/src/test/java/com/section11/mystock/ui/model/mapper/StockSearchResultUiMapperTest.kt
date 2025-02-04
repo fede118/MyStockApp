@@ -7,7 +7,7 @@ import com.section11.mystock.domain.models.CloseMatchStockPriceMovement
 import com.section11.mystock.domain.models.StockInformation.Summary
 import com.section11.mystock.domain.models.StockInformation.Summary.PriceMovement
 import com.section11.mystock.domain.models.StockSearchResults
-import com.section11.mystock.ui.common.extentions.toPercentageFormat
+import com.section11.mystock.ui.common.extensions.toPercentageFormat
 import com.section11.mystock.ui.model.StockSearchResultUiModel
 import com.section11.mystock.ui.theme.Green
 import com.section11.mystock.ui.theme.Red

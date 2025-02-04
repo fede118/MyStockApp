@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
+import com.section11.mystock.ui.common.extensions.showSnackBar
 import com.section11.mystock.ui.common.model.SnackBarModel
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
