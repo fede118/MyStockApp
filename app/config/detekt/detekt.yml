@@ -135,7 +135,8 @@ complexity:
     constructorThreshold: 7
     ignoreDefaultParameters: false
     ignoreDataClasses: true
-    ignoreAnnotatedParameter: []
+    ignoreAnnotatedParameter: ["Composable", "ComposeHelperFunction"] # Ignore @Composable and @ComposeHelperFunction functions, Compose itself has many composables that break this rule.
+    ignoreAnnotated: ["Composable", "ComposeHelperFunction"] # Ignore @Composable and @ComposeHelperFunction functions, Compose itself has many composables that break this rule.
   MethodOverloading:
     active: false
     threshold: 6
@@ -166,7 +167,7 @@ complexity:
     ignoreStringsRegex: '$^'
   TooManyFunctions:
     active: true
-    excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**', "**/mapper/**"]
     thresholdInFiles: 11
     thresholdInClasses: 11
     thresholdInInterfaces: 11
@@ -175,7 +176,7 @@ complexity:
     ignoreDeprecated: false
     ignorePrivate: false
     ignoreOverridden: false
-    ignoreAnnotatedFunctions: []
+    ignoreAnnotatedFunctions: ['Preview', 'DarkAndLightPreviews']
 
 coroutines:
   active: true

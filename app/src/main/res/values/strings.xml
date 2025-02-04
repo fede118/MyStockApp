@@ -1,10 +1,19 @@
 <resources>
     <string name="app_name">MyStock</string>
 
+    <!--  Stocks Watchlist  -->
+    <string name="watchlist_search_hint">Search stock, symbol, ETF…</string>
+    <string name="watchlist_stock_tile">%s - %s</string>
+    <string name="app_version_info_debug">Debug Version - Environment: %s</string>
+
+    <!--  Search Bar results strings  -->
+    <string name="search_bar_results_up_arrow">↑</string>
+    <string name="search_bar_results_down_arrow">↓</string>
+
     <!--  Single Stock Screen String  -->
     <string name="single_stock_screen_symbol_text">Symbol: %s</string>
     <string name="single_stock_screen_exchange_text">"Exchange: %s</string>
-    <string name="single_stock_screen_price_text">Price: %s %s</string>
+    <string name="single_stock_screen_price_text">Price: %s%s</string>
     <string name="single_stock_screen_price_movement_title">Price Movement</string>
     <string name="single_stock_screen_arrow_up">▲</string>
     <string name="single_stock_screen_arrow_down">▼</string>
@@ -12,4 +21,12 @@
     <string name="single_stock_screen_plus">+</string>
     <string name="single_stock_screen_minus">-</string>
     <string name="single_stock_screen_price_movement_percentage">%s %s%%</string>
+    <string name="single_stock_screen_climate_score_title">CDP Climate Change Score</string>
+    <string name="single_stock_screen_snackbar_with_link_title">You\'re about to open an external link: %s</string>
+    <string name="single_stock_screen_snackbar_with_link_action_label">Open Link</string>
+    <string name="single_stock_screen_actionable_icon_add_content_description">Add to Watchlist</string>
+    <string name="single_stock_screen_actionable_icon_remove_content_description">Remove from Watchlist</string>
+
+    <!--  Common  -->
+    <string name="with_percentage">%s%%</string>
 </resources>

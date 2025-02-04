@@ -20,7 +20,7 @@ android {
         minSdk = 31
         targetSdk = 35
         versionCode = 1
-        versionName = "1.0"
+        versionName = "0.4.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -28,6 +28,7 @@ android {
         buildConfigField("String", "SERP_API_KEY", "\"${project.findProperty("serpApiKey") ?: ""}\"")
         buildConfigField("String", "SERP_API_BASE_URL", "\"${project.findProperty("serpApiBaseUrl") ?: ""}\"")
         buildConfigField("String", "SERP_API_DEFAULT_MARKET", "\"${project.findProperty("serpApiDefaultMarket") ?: ""}\"")
+        buildConfigField("String", "TEST_API_BASE_URL", "\"${project.findProperty("apiaryTestUrl") ?: ""}\"")
     }
 
     buildTypes {
@@ -94,8 +95,8 @@ dependencies {
     testImplementation(libs.androidx.core.testing)
     testImplementation(libs.androidx.compose.junit4)
     testImplementation(libs.androidx.test.orchestrator)
-    testImplementation("io.mockk:mockk-android:1.13.16")
-    testImplementation("io.mockk:mockk-agent:1.13.16")
+    testImplementation(libs.mockk.android)
+    testImplementation(libs.mockk.agent)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -141,8 +142,9 @@ tasks.create("jacocoTestReport", JacocoReport::class.java) {
         "**/dto/**/*.*",
         "**/database/**/*.*",
         "**/navigation/**/*.*",
+        "**/previewsrepositories/**/*.*",
+        "**/secretmenu/**/*.*",
         "**/composables/**", // exclude files in composable folders
-        "**/*Composable*.*", // exclude files with "composable" in their name
         "**/*Composable*.*", // exclude files with "composable" in their name
         "**/ComposableSingletons*.*", // Exclude ComposableSingletons
         "**/*Application*.*", // Exclude Application classes

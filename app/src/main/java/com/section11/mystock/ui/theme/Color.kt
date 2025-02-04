@@ -13,3 +13,6 @@ val Pink40 = Color(0xFF7D5260)
 val Green = Color(0xFF4CAF50)
 val Green40 = Color.Green.copy(alpha = 0.4f)
 val Red = Color(0xFFF44336)
+val RedIntense = Color(0xFFEC1626)
+
+val gray50 = Color(0xFFE0E0E0)

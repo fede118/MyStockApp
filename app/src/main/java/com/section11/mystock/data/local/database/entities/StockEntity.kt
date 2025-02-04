@@ -7,5 +7,6 @@ import androidx.room.PrimaryKey
 data class StockEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
-    val symbol: String
+    val symbol: String,
+    val exchange: String
 )

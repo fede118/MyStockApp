@@ -18,10 +18,31 @@ class RoomStockWatchlistRepository @Inject constructor(
         }
     }
 
+    override suspend fun saveStock(stock: Stock) {
+        stockDao.insert(stock.toStockEntity())
+    }
+
+    override fun isStockInWatchlist(symbol: String): Boolean {
+        return stockDao.getStockBySymbol(symbol) != null
+    }
+
+    override suspend fun removeStockFromWatchlist(symbol: String) {
+        stockDao.remove(symbol)
+    }
+
     private fun StockEntity.toStock(): Stock {
         return Stock(
             name = name,
-            symbol = symbol
+            symbol = symbol,
+            exchange = exchange
+        )
+    }
+
+    private fun Stock.toStockEntity(): StockEntity {
+        return StockEntity(
+            name = name,
+            symbol = symbol,
+            exchange = exchange
         )
     }
 }

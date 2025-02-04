@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,14 +23,17 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.TextUnit
+import com.section11.mystock.framework.utils.ComposeHelperFunction
 import com.section11.mystock.framework.utils.DarkAndLightPreviews
-import com.section11.mystock.ui.model.GraphUiModel
+import com.section11.mystock.ui.common.previewsrepositories.FakeRepositoryForPreviews
+import com.section11.mystock.ui.model.StockInformationUiModel.GraphUiModel
 import com.section11.mystock.ui.theme.Green40
 import com.section11.mystock.ui.theme.LocalDimens
 import com.section11.mystock.ui.theme.LocalSpacing
@@ -53,22 +57,26 @@ private const val GRAPH_ASPECT_RATIO = 3 / 2f
  * graph to work
  */
 @Composable
-fun LineGraph(graphUiModel: GraphUiModel, animationEnabled: Boolean = true) {
+fun LineGraph(
+    modifier: Modifier = Modifier,
+    graphUiModel: GraphUiModel,
+    animationEnabled: Boolean = true
+) {
     val textMeasurer = rememberTextMeasurer()
     val spacing = LocalSpacing.current
     val dimens = LocalDimens.current
     val animateProgress = remember {
         Animatable(INITIAL_ANIM_VALUE)
     }
-    val backgroundVerticalLines = graphUiModel.graphBackgroundVerticalLinesAmount ?: ZERO
-    val backgroundHorizontalLines = graphUiModel.graphBackgroundHorizontalLinesAmount ?: ZERO
+    val backgroundVerticalLines = graphUiModel.graphGridVerticalLinesAmount ?: ZERO
+    val backgroundHorizontalLines = graphUiModel.graphGridHorizontalLinesAmount ?: ZERO
 
     LaunchedEffect(key1 = graphUiModel.graphPoints) {
         animateProgress.animateTo(TARGET_ANIM_VALUE, tween(ANIM_DURATION))
     }
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .padding(spacing.small)
             .fillMaxWidth()
     ) {
@@ -88,11 +96,15 @@ fun LineGraph(graphUiModel: GraphUiModel, animationEnabled: Boolean = true) {
 
                     onDrawBehind {
                         drawBackgroundGrid(
-                            Pair(backgroundVerticalLines, backgroundHorizontalLines),
+                            verticalAndHorizontalLines = Pair(
+                                backgroundVerticalLines,
+                                backgroundHorizontalLines
+                            ),
+                            graphEdgeLabels = graphUiModel.graphEdgeLabels,
                             graphHorizontalLabels = graphUiModel.graphHorizontalLabels,
                             graphHorizontalLabelsPaddingTop = spacing.verySmall.toPx(),
-                            stokeSize = dimens.smallest.toPx(),
-                            textSize = dimens.textMedium,
+                            stokeSize = dimens.mOctave.toPx(),
+                            textSize = dimens.textSmallest,
                             textMeasurer = textMeasurer
                         )
 
@@ -104,12 +116,8 @@ fun LineGraph(graphUiModel: GraphUiModel, animationEnabled: Boolean = true) {
                         }
                         clipRect(right = widthValue) {
                             val brush = Brush.verticalGradient(listOf(Green40, Color.Transparent))
-                            drawPath(path, Color.Green, style = Stroke(dimens.verySmall.toPx()))
-                            drawPath(
-                                path = filledPath,
-                                brush = brush,
-                                style = Fill
-                            )
+                            drawPath(path, Color.Green, style = Stroke(dimens.mQuarter.toPx()))
+                            drawPath(path = filledPath, brush = brush, style = Fill)
                         }
                     }
                 }
@@ -145,17 +153,22 @@ private fun generatePath(data: List<Double>, size: Size): Path {
     return path
 }
 
+@ComposeHelperFunction
 private fun DrawScope.drawBackgroundGrid(
     verticalAndHorizontalLines: Pair<Int, Int>,
+    graphEdgeLabels: Pair<String, String>?,
     graphHorizontalLabels: List<String>? = null,
     graphHorizontalLabelsPaddingTop: Float,
     stokeSize: Float,
     textSize: TextUnit,
     textMeasurer: TextMeasurer
 ) {
-    drawRect(Color.Gray, style = Stroke(stokeSize))
-    val (backgroundVerticalLines: Int, backgroundHorizontalLines: Int) = verticalAndHorizontalLines
+    drawRect(color = Color.Gray, style = Stroke(stokeSize))
+    graphEdgeLabels?.let {
+        drawEdgeLabels(it, textSize, textMeasurer, graphHorizontalLabelsPaddingTop)
+    }
 
+    val (backgroundVerticalLines: Int, backgroundHorizontalLines: Int) = verticalAndHorizontalLines
     drawVerticalLines(
         backgroundVerticalLines = backgroundVerticalLines,
         barWidthPx = stokeSize,
@@ -168,6 +181,29 @@ private fun DrawScope.drawBackgroundGrid(
     drawHorizontalLines(
         backgroundHorizontalLines = backgroundHorizontalLines,
         barWidthPx = stokeSize
+    )
+}
+
+private fun DrawScope.drawEdgeLabels(
+    graphEdgeLabels: Pair<String, String>,
+    textSize: TextUnit,
+    textMeasurer: TextMeasurer,
+    graphHorizontalLabelsPaddingTop: Float
+) {
+    drawXAxisLabelCentered(
+        text = graphEdgeLabels.first,
+        textSize = textSize,
+        x = ZERO_F,
+        textMeasurer = textMeasurer,
+        paddingTop = graphHorizontalLabelsPaddingTop
+    )
+
+    drawXAxisLabelCentered(
+        text = graphEdgeLabels.second,
+        textSize = textSize,
+        x = size.width,
+        textMeasurer = textMeasurer,
+        paddingTop = graphHorizontalLabelsPaddingTop
     )
 }
 
@@ -190,7 +226,7 @@ private fun DrawScope.drawVerticalLines(
         )
 
         graphHorizontalLabels?.let {
-            drawXAxisLabelsCentered(
+            drawXAxisLabelCentered(
                 text = it[i],
                 textSize = textSize,
                 x = startX,
@@ -201,7 +237,7 @@ private fun DrawScope.drawVerticalLines(
     }
 }
 
-private fun DrawScope.drawXAxisLabelsCentered(
+private fun DrawScope.drawXAxisLabelCentered(
     text: String,
     textSize: TextUnit,
     x: Float,
@@ -244,23 +280,14 @@ private fun DrawScope.drawHorizontalLines(backgroundHorizontalLines: Int, barWid
 @DarkAndLightPreviews
 @Composable
 fun MyScreen() {
+    val fakeRepo = FakeRepositoryForPreviews(LocalContext.current)
     MyStockTheme {
         Surface {
-            val dataPoints = listOf(
-                100.00,
-                120.05,
-                115.15,
-                129.15,
-                156.15,
-                110.15,
-                300.12
-                // Add more data points here...
+            LineGraph(
+                modifier = Modifier.statusBarsPadding(),
+                fakeRepo.getSingleStockInformationUiModel().graphModel,
+                animationEnabled = false
             )
-            val graphInfo = GraphUiModel(
-                graphPoints = dataPoints,
-                graphHorizontalLabels = listOf("08:31", "08:36", "08:40", "08:45")
-            )
-            LineGraph(graphInfo, animationEnabled = false)
         }
     }
 }

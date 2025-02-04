@@ -5,4 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface StockWatchlistRepository {
     fun getAllStocks(): Flow<List<Stock>>
+    fun isStockInWatchlist(symbol: String): Boolean
+    suspend fun saveStock(stock: Stock)
+    suspend fun removeStockFromWatchlist(symbol: String)
 }

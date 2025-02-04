@@ -11,13 +11,9 @@ This application is built using modern Android development practices and leverag
 
 ## How it Looks (WIP - making changes everyday now)
 
-Watchlist Screen | Single Stock Screen
-------|-------
-![image](https://github.com/user-attachments/assets/d9f94f67-8b3b-439b-b0cf-545e1f52aacb) | ![image](https://github.com/user-attachments/assets/52b61004-06a6-4d00-bdca-dad65f56f3ab)
-
-### Last Update (still in development)
-
-https://github.com/user-attachments/assets/3d330df0-d389-4bf8-9076-354e697e6c13
+Search | Watchlist | SingleStockView
+-------|---------|---------
+![image](https://github.com/user-attachments/assets/87702fbd-da22-490a-9f03-b91e3e1ea36c)|![image](https://github.com/user-attachments/assets/50fa0263-a8b8-495c-885e-c7e60005be78)|![image](https://github.com/user-attachments/assets/3f774b0b-1e11-4fb9-a688-9b0b3ec7bf6d)
 
 ## Key Features
 
@@ -61,10 +57,11 @@ The application follows a clean architecture, separating concerns into distinct 
 
 ## Future Enhancements
 
-*   **Match Watchlist screen to single stock screen:** I want to have a more consistent UI maybe have the same card design but smaller with less info, and see the second screen on tap
-*   **Stock Search and Add to Watchlist:** Implement a search functionality (through and api) to allow users to find stocks and add them to their watchlist.
+*   **Watchlist screen should get % from service** Right now its mocked data I would like it to be from a service, but I don't want to make N calls to get percentages. I need to check if it can be fetched on bulk.
 *   **Error Handling:** Implement robust error handling for network requests, data parsing, and other potential issues, providing informative feedback to the user.
 *   **UI Compose Testing:** Address the current issues with running Compose tests to ensure the UI is thoroughly tested.
+*   **Custom backend:** I'll probably need my own backend to fetch information from different API's and maybe scrape some other info which I cant find an API for
+*   **Add market selection** For now the search for a single stock only works for NASDAQ. Its just a parameter on the search, it would be nice to have something on the home screen to change the market.
 
 ## Contact
 
@@ -73,9 +70,9 @@ If you have any questions or suggestions, feel free to reach out!
 ## Current backlog
 This section has things that I want to work on, improve or that I know are not the best but are not a priority
 
-* ** Make the watchlist UI match the single stock UI. I want each stock to be a smaller version of the single stock UI, maybe make it larger on tap (hiding all the other stuff)
 * ** In the single stock screen get the labels for the Y axis. This is tricky since I added a padding so that the min and max values are not at the edge of the graph, but this means that getting the data sorted from max to min and then getting the normalized Y index wont work
 * ** Find a better way to mock information for previews (also to stop detekt triggering false positives) 
 * ** Fix @DarkAndLightAnnotation detekt issue where the name doesn't match the file name and suppress is not working
+* ** Show a snackbar when removing a stock from watchlist to have the user confirm the deletion
 
 ---
